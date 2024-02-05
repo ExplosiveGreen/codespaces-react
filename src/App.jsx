@@ -2,7 +2,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-
 import Home from './components/Home';
 import Login from './components/Login';
 import E404 from './components/E404';
