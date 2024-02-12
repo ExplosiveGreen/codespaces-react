@@ -2,24 +2,16 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Home from './components/Home';
-import Login from './components/Login';
-import E404 from './components/E404';
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home/>,
-  },
-  {
-    path: "/Login",
-    element: <Login/>,
-  },
-  {
-    path: "*",
-    element: <E404/>,
-  },
-]);
+import routes from './router';
+import { useSelector } from 'react-redux'
 function App() {
+  const user = useSelector((state) => state.user.user)
+  const router = createBrowserRouter(
+  routes.filter(item => 
+    (!user && item.auth.includes('noauth')) ||
+    (user && item.auth.some(item2 => user.auth.includes(item2)))
+  )
+);
   return (
     <createBrowserRouter>
       <RouterProvider router={router} />
