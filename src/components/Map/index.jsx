@@ -1,4 +1,4 @@
-function Map() {
+function Map({locations}) {
     return (
         <div>Map</div>
     );
