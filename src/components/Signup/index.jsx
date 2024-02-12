@@ -1,6 +1,14 @@
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../Redux-Actions/user'
 function Signup() {
+    const dispatch = useDispatch()
     return (
-        <div>Signup</div>
+        <div>        <button
+        aria-label="sign user"
+        onClick={() => dispatch(setUser({auth:['org','donator']}))}
+      >
+        Increment
+      </button></div>
     );
   }
   
