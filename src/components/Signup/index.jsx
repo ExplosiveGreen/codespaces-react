@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { setUser } from '../../Redux-Actions/user'
+import { setUser } from '../../../redux/actions/user'
 function Signup() {
     const dispatch = useDispatch()
     return (

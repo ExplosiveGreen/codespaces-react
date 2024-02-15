@@ -3,29 +3,16 @@ import { useSelector } from 'react-redux';
 import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import { useEffect, useState } from 'react';
 import { Box, List, ListItem, ListItemText } from '@mui/material';
+import DonationService from '../../../services/DonationService';
 import MyTable from '../MyTable';
 
 
 function DonatorDonations() {
     const [tableData, setTableData] = useState([])
     const user = useSelector((state) => state.user.user)
-    const getDonations = async () => {
-        return [
-            {
-                id:1,
-                items:[{name:'shirts', amount:50},{name:'shoes', amount:50}],
-                status:'finished'
-            },
-            {
-                Id:2,
-                items:[{name:'shirts', amount:60},{name:'shoes', amount:60}],
-                status:'finished'
-            }
-        ];
-    }
     useEffect(() => {
         const fetchData = async () => {
-          const data = await getDonations();
+          const data = await DonationService.getDonatorDonations(user);
           setTableData(data);
         };
     

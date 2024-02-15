@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { Menu, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux'
-import { setUser } from '../../Redux-Actions/user'
+import { setUser } from '../../../redux/actions/user'
 
 const drawerWidth = 240;
 

@@ -7,12 +7,12 @@ export const routesSlice = createSlice({
   },
   reducers: {
     addRoute: (state, action) => {
-        const {longitude,latitude} = action.payload;
-        state.routes = [...state.routes, {longitude,latitude}];
+        const location = action.payload;
+        state.routes = [...state.routes, location];
     },
     deleteRoute: (state, action) => {
-        const {longitude,latitude} = action.payload;
-        state.routes = state.routes.filter(item => !item == {longitude,latitude});
+        const location = action.payload;
+        state.routes = state.routes.filter(item => !item == location);
     },
   },
 })

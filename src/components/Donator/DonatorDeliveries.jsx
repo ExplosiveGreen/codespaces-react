@@ -4,36 +4,15 @@ import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import MyTable from '../MyTable';
+import DeliveryService from '../../../services/DeliveryService';
 
 
 function DonatorDeliveries() {
     const [tableData, setTableData] = useState([])
     const user = useSelector((state) => state.user.user)
-    const getDeliveries = async () => {
-        return [
-            {Id:1,
-            Donator:{name:'hfghf'},
-            Organization:{name:'hfghfghfg'},
-            Delivery_date:Date('12.2.2024'),
-            status:'finished',
-            donation:{
-                items:[{name:'shirts', amount:50},{name:'shoes', amount:50}],
-                status:'finished'
-            }},
-            {Id:2,
-                Donator:{name:'hfghf'},
-                Organization:{name:'hfghfghfg'},
-                Delivery_date:Date('13.2.2024'),
-                status:'finished',
-                donation:{
-                    items:[{name:'shirts', amount:50},{name:'shoes', amount:50}],
-                    status:'finished'
-            }}
-        ];
-    }
     useEffect(() => {
         const fetchData = async () => {
-          const data = await getDeliveries();
+          const data = await DeliveryService.getDonatorDeliveries(user);
           setTableData(data);
         };
     

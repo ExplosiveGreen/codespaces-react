@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import userReducer from './Redux-Actions/user'
-import routesReducer from './Redux-Actions/routes'
+import userReducer from './actions/user'
+import routesReducer from './actions/routes'
 import storageSession from 'redux-persist/lib/storage/session'
 import { persistReducer, persistStore } from 'redux-persist';
 
