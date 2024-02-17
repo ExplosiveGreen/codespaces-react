@@ -1,51 +1,68 @@
-import { useDispatch,useSelector } from 'react-redux'
-import { addRoute,deleteRoute } from '../../../redux/actions/routes'
+"use client";
+/* global google */
 import {useEffect, useState} from "react";
 import {APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap} from "@vis.gl/react-google-maps";
-import LocationService from '../../../services/LocationService';
 
-function Map({locations, isDisplayRoute}) {
+export default function Intro(){
+    const position = {lat: 33.54, lng: 10};
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch()
-    // dispatch(addRoute([longetute,latetud]))
-    const routes = useSelector((state) => state.routes.routes)
-
-    const [position, setPosition] = useState({});
-
-    useEffect(async()=>{
-        //here we create a service
-        const location=await LocationService.getLocation();
-        setPosition(location);
-    },[])
 
 
     return(
-        <APIProvider appKey = {process.env.VITE_GOOGLE_API_KEY}>
-            <div style={{height: "100vh", width: "100%"}}>
-                <Map zoom = {9} center={position} mapId={process.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
-                    {/*    This is where you insert your markers! */}
-                    {locations.map(item=>{
-                        return <>
-                            <AdvancedMarker position={item.location}>
-                            {/*    Customizing the marker? here!*/}
-                                <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
-                            </AdvancedMarker>
-                            {open && <InfoWindow position={item.location} onCloseClick={()=>setOpen(false)}>
-                                {item.element}
-                            </InfoWindow> }
-                        </>
-                    })}
-                    
-                    {isDisplayRoute && <Directions routesList={routes}/>}
-                </Map>
-            </div>
-    
-        </APIProvider>
-        );
+    <APIProvider appKey = {"AIzaSyBH0vU_pZu8o-z2JifMnzab4g4cpgAhy68"}>
+        <div style={{height: "100vh", width: "100%"}}>
+            <Map zoom = {9} center={position} mapId={/* Enter your custom map ID here, get it from the API webpage for your specific map. it's REQUIRED!!! */} fullscreenControl={false} onClick={()=> setOpen(true)}>
+                {/*    This is where you insert your markers! */}
 
-  }
-  
-  function Directions({routesList}){
+                {/*Example for this map peticularly: */}
+                <AdvancedMarker position={position}>
+                {/*    Customizing the marker? here!*/}
+                    <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
+                </AdvancedMarker>
+                {open && <InfoWindow position={position} onCloseClick={()=>setOpen(false)}>
+                    <p>Text description for your marker goes here</p>
+                </InfoWindow> }
+
+                <AdvancedMarker position={position}>
+                    {/*    Customizing the marker? here!*/}
+                    <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
+                </AdvancedMarker>
+                {open && <InfoWindow position={position} onCloseClick={()=>setOpen(false)}>
+                    <p>Text description for your marker goes here</p>
+                </InfoWindow> }
+            {/*    This is how we render directions!:*/}
+                <Directions />
+            </Map>
+        </div>
+
+    </APIProvider>
+    );
+}
+
+function Markers(){
+    const map = useMap();
+    const [marker, setMarker] = useState({
+        lat: "",
+        lng:"",
+        compName: "",
+        compDesc: "",
+        missingInv: ""
+    });
+    const [markers, setMarkers] = useState<marker>([]);
+    const [markersIndex, setMarkersIndex] = useState(0);
+    const selectedMarker = markers[markersIndex];
+
+    // Here we're supposed to call the server... somehow?
+    useEffect(()=>{
+        if (!map) return;
+        //setting up the marker list here somehow???
+        //IDK, I'm not sure how to call server here :(
+
+    }, [map]);
+
+}
+
+function Directions(){
     const map = useMap();
     const routesLibrary = useMapsLibrary("routes");
     const [directionsService, setDirectionsService] = useState();
@@ -66,15 +83,6 @@ function Map({locations, isDisplayRoute}) {
         directionsService.route({
             origin: "",
             destination: "",
-            waypoints: routesList.map(item=>{
-                return {
-                    location: {
-                        lat: item[0], 
-                        lng: item[1]
-                    },
-                    stopover: true
-                }
-            }),
             travelMode: google.maps.TravelMode.DRIVING,
             provideRouteAlternatives: true
         }).then(response => {
@@ -112,5 +120,3 @@ function Map({locations, isDisplayRoute}) {
         </ul>
     </div>
 }
-
-  export default Map;
