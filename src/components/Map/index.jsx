@@ -9,6 +9,4 @@ function Map({locations}) {
         <div>Map</div>
     );
   }
-  
-  
   export default Map;
