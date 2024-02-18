@@ -16,9 +16,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, ShoppingCart } from '@mui/icons-material';
 import { Menu, MenuItem } from '@mui/material';
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { setUser } from '../../../redux/actions/user'
 
 const drawerWidth = 240;
@@ -71,16 +71,26 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerLeft({children,headerText,drawList}) {
   const dispatch = useDispatch()
   const theme = useTheme();
+  const routes = useSelector((state) => state.routes.routes)
   const [open, setOpen] = useState(true);
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [cart, setCart] = useState(null);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleProfileMenu = (event) => {
+    setProfile(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleProfileClose = () => {
+    setProfile(null);
+  };
+
+  const handleCartMenu = (event) => {
+    setCart(event.currentTarget);
+  };
+
+  const handleCartClose = () => {
+    setCart(null);
   };
 
   const handleDrawerOpen = () => {
@@ -114,14 +124,14 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
                  aria-label="account of current user"
                  aria-controls="menu-appbar"
                  aria-haspopup="true"
-                 onClick={handleMenu}
+                 onClick={handleProfileMenu}
                  color="inherit"
                >
                  <AccountCircle />
                </IconButton>
                <Menu
                  id="menu-appbar"
-                 anchorEl={anchorEl}
+                 anchorEl={profile}
                  anchorOrigin={{
                    vertical: 'top',
                    horizontal: 'right',
@@ -131,11 +141,42 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
                    vertical: 'top',
                    horizontal: 'right',
                  }}
-                 open={Boolean(anchorEl)}
-                 onClose={handleClose}
+                 open={Boolean(profile)}
+                 onClose={handleProfileClose}
                >
                  <MenuItem><Link to='profile'>Profile</Link></MenuItem>
                  <MenuItem onClick={()=>dispatch(setUser(null))}>Logout</MenuItem>
+               </Menu>
+               <IconButton
+                 size="large"
+                 aria-label="account of current user"
+                 aria-controls="menu-appbar"
+                 aria-haspopup="true"
+                 onClick={handleCartMenu}
+                 color="inherit"
+               >
+                 <ShoppingCart />
+               </IconButton>
+               <Menu
+                 id="menu-appbar"
+                 anchorEl={cart}
+                 anchorOrigin={{
+                   vertical: 'top',
+                   horizontal: 'right',
+                 }}
+                 keepMounted
+                 transformOrigin={{
+                   vertical: 'top',
+                   horizontal: 'right',
+                 }}
+                 open={Boolean(cart)}
+                 onClose={handleCartClose}
+               >
+                 {routes.map(item => <MenuItem>
+                  {`(${item[0]},${item[2]})`}
+                 </MenuItem>
+                  )}
+                  <MenuItem><Link to={'/generate'}>generate route</Link></MenuItem>
                </Menu>
             </div>
         </Toolbar>

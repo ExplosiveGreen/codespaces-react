@@ -3,10 +3,9 @@ import { addRoute,deleteRoute } from '../../../redux/actions/routes'
 import {useEffect, useState} from "react";
 import {APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap} from "@vis.gl/react-google-maps";
 import LocationService from '../../../services/LocationService';
-
 function MyMap({locations, isDisplayRoute}) {
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
 
@@ -20,9 +19,9 @@ function MyMap({locations, isDisplayRoute}) {
 
 
     return(
-        <APIProvider appKey = {process.env.VITE_GOOGLE_API_KEY}>
+        <APIProvider appKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
             <div style={{height: "100vh", width: "100%"}}>
-                <Map zoom = {9} center={position} mapId={process.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
+                <Map zoom = {9} center={position} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
                     {/*    This is where you insert your markers! */}
                     {locations.map(item=>{
                         return <>

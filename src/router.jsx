@@ -15,6 +15,11 @@ export default [
         icon: <HomeIcon/>,
       },
       {
+        path: "/:generate",
+        element: <Home/>,
+        auth:['carrier'],
+      },
+      {
         path: "/deliveries",
         element: <DonatorDeliveries/>,
         auth:['donator'],
