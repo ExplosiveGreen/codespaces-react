@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap} from "@vis.gl/react-google-maps";
 import LocationService from '../../../services/LocationService';
 
-function Map({locations, isDisplayRoute}) {
+function MyMap({locations, isDisplayRoute}) {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch()
     // dispatch(addRoute([longetute,latetud]))
@@ -113,4 +113,4 @@ function Map({locations, isDisplayRoute}) {
     </div>
 }
 
-  export default Map;
+  export default MyMap;
