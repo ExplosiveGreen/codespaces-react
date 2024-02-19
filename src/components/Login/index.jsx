@@ -23,7 +23,9 @@ function Login() {
         });
     }
     const login = () => {
+        console.log(users,validUser)
         const validuser = users.find(item => item.email == validUser.email && item.password == validUser.password);
+        console.log(validuser)
         if(validuser) dispatch(setUser(validuser));
     }
     return (

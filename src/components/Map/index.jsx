@@ -9,19 +9,25 @@ function MyMap({locations, isDisplayRoute}) {
     // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
 
-    const [position, setPosition] = useState({});
-
-    useEffect(()=>{
-        //here we create a service
-        (async() => {
-            const location=await LocationService.getLocation();
-            setPosition(location);
-        })()
-    },[])
+    const [lat, setLatitude] = useState(10.0);
+    const [lng, setLongitude] = useState(10.0);
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
     return(
         <APIProvider apiKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
             <div style={{height: "100vh", width: "100%"}}>
-                <Map zoom = {9} center={position && { lat: 32.077890, lng: 34.774175 }} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
+                <Map zoom = {12} center={{ lat, lng }} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
                     {/*    This is where you insert your markers! */}
                     {locations.map(item=>{
                         return <>

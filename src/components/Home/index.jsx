@@ -13,7 +13,7 @@ function Home() {
     return (
         <PersistentDrawerLeft 
             headerText ='GiveHub'
-            drawList = {routes.filter(item => (user && 'name','icon' in item && item.auth.some(item2 => user.auth.includes(item2))))}
+            drawList = {routes.filter(item => (user && 'name','icon' in item && item.auth.includes(user.__t)))}
         >
           <Map locations={locations} isDisplayRoute={Boolean(generate)} />
         </PersistentDrawerLeft>
