@@ -11,17 +11,17 @@ function MyMap({locations, isDisplayRoute}) {
 
     const [position, setPosition] = useState({});
 
-    useEffect(async()=>{
+    useEffect(()=>{
         //here we create a service
-        const location=await LocationService.getLocation();
-        setPosition(location);
+        (async() => {
+            const location=await LocationService.getLocation();
+            setPosition(location);
+        })()
     },[])
-
-
     return(
-        <APIProvider appKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
+        <APIProvider apiKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
             <div style={{height: "100vh", width: "100%"}}>
-                <Map zoom = {9} center={position} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
+                <Map zoom = {9} center={position && { lat: 32.077890, lng: 34.774175 }} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
                     {/*    This is where you insert your markers! */}
                     {locations.map(item=>{
                         return <>

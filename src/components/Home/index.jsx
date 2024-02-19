@@ -15,7 +15,7 @@ function Home() {
             headerText ='GiveHub'
             drawList = {routes.filter(item => (user && 'name','icon' in item && item.auth.some(item2 => user.auth.includes(item2))))}
         >
-          {/* <Map locations={locations} isDisplayRoute={Boolean(generate)} /> */}
+          <Map locations={locations} isDisplayRoute={Boolean(generate)} />
         </PersistentDrawerLeft>
     )
   }
