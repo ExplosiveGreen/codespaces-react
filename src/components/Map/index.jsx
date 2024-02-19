@@ -28,16 +28,23 @@ function MyMap({locations, isDisplayRoute}) {
         <APIProvider apiKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
             <div style={{height: "100vh", width: "100%"}}>
                 <Map zoom = {12} center={{ lat, lng }} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
-                    {/*    This is where you insert your markers! */}
-                    {locations.map(item=>{
+                       {/* This is where you insert your markers! */}
+
+
+
+                    {locations && locations.map(item=>{
+                        const lat = item.location.lat, lng=item.location.lng;
                         return <>
-                            <AdvancedMarker position={item.location}>
+                        {console.log('test 01: ',item.location)}
+                        {item.location &&<>
+                            <AdvancedMarker position={{ lat,lng }}>
                             {/*    Customizing the marker? here!*/}
                                 <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
                             </AdvancedMarker>
-                            {open && <InfoWindow position={item.location} onCloseClick={()=>setOpen(false)}>
+                            {open && <InfoWindow position={{ lat,lng }} onCloseClick={()=>setOpen(false)}>
+                                {console.log(item.element)}
                                 {item.element}
-                            </InfoWindow> }
+                            </InfoWindow> }</>}
                         </>
                     })}
                     

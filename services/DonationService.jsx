@@ -7,4 +7,12 @@ export default class DonationService {
             console.log(e)
         }
     }
+    static async putDonationRequest (donation) {
+        try{
+            const result = await axios.post(`https://givehub-server.onrender.com/api/donations`,donation)
+            return result.data;
+        }catch(e) {
+            console.log(e)
+        }
+    }
 }
