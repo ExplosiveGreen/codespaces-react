@@ -33,12 +33,12 @@ function Login() {
           <TextField label="Email" name="email" value={validUser.email} type='email' onChange={handleChange}/>
           <TextField label="Password" name="password" value={validUser.password} type='password' onChange={handleChange}/>
           <button type='submit' onClick={login}>submit</button>
-          <button
+          {/* <button
             aria-label="sign user"
             onClick={() => dispatch(setUser({auth:['org','donator','carrier']}))}
           >
             test login
-          </button>
+          </button> */}
         </div>
     );
   }
