@@ -35,14 +35,12 @@ function MyMap({locations, isDisplayRoute}) {
                     {locations && locations.map(item=>{
                         const lat = item.location.lat, lng=item.location.lng;
                         return <>
-                        {console.log('test 01: ',item.location)}
                         {item.location &&<>
                             <AdvancedMarker position={{ lat,lng }}>
                             {/*    Customizing the marker? here!*/}
                                 <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
                             </AdvancedMarker>
                             {open && <InfoWindow position={{ lat,lng }} onCloseClick={()=>setOpen(false)}>
-                                {console.log(item.element)}
                                 {item.element}
                             </InfoWindow> }</>}
                         </>

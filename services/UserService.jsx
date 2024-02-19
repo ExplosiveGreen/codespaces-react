@@ -7,6 +7,10 @@ export default class UserService {
     );
     return result.data;
   }
+  static async getUserById(userId) {
+    const result = await axios.get(`https://givehub-server.onrender.com/api/users${userId}`);
+    return result.data;
+  }
   static async getAllUser() {
     try {
       const result = await axios.get(

@@ -35,7 +35,6 @@ function Home() {
         const result = await UserService.getAllOrganizations();
         setLocations(
           result.map((org) => {
-            console.log("org",org.donation_requests)
             return {
               location: {
                 lat: org.location.latitude,
@@ -83,7 +82,6 @@ function Home() {
   ];
   const saveDonation = async (event) => {
     event.preventDefault();
-    console.log("saveDonation",items)
     const resultId = await DonationService.putDonationRequest({
       items,
       status: "Pending",
@@ -95,7 +93,7 @@ function Home() {
       );
       setDonationForm(false);
       const newUser = await UserService.getUserById(user._id)
-      dispatch(setUser(newUser))
+      if(newUser) dispatch(setUser(newUser))
     }
   };
   useEffect(() => {
