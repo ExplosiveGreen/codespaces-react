@@ -1,5 +1,5 @@
 import routes from "../../router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import Map from "../Map";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import DonationService from "../../../services/DonationService";
 import UserService from "../../../services/UserService";
+import {setUser} from "../../../redux/actions/user";
 
 function Home() {
   const user = useSelector((state) => state.user.user);
@@ -26,6 +27,7 @@ function Home() {
   const [item, setItem] = useState({});
   const [items, setItems] = useState([]);
   let { generate } = useParams();
+  const dispatch = useDispatch()
 
   const getLocations = async () => {
     if (user.__t !== "org") {
@@ -33,7 +35,7 @@ function Home() {
         const result = await UserService.getAllOrganizations();
         setLocations(
           result.map((org) => {
-            console.log(org)
+            console.log("org",org.donation_requests)
             return {
               location: {
                 lat: org.location.latitude,
@@ -42,7 +44,7 @@ function Home() {
               element: (
                 <>
                   <List>
-                    {org.donation_requests.map((dont) => {
+                    {org.donation_requests.map((dont) =>
                       <ListItem><List>
                         {dont.items.map(({ name, amount }) => (
                           <ListItem>
@@ -50,10 +52,10 @@ function Home() {
                           </ListItem>
                         ))}
                         </List>
-                      </ListItem>;
-                    })}
+                        <Button>Accept</Button>
+                      </ListItem>
+                    )}
                   </List>
-                  <Button>Accept</Button>
                 </>
               ),
             };
@@ -79,7 +81,9 @@ function Home() {
     },
     { id: "status", label: "Status", accessor: (row) => row.status },
   ];
-  const saveDonation = async () => {
+  const saveDonation = async (event) => {
+    event.preventDefault();
+    console.log("saveDonation",items)
     const resultId = await DonationService.putDonationRequest({
       items,
       status: "Pending",
@@ -90,6 +94,8 @@ function Home() {
         resultId
       );
       setDonationForm(false);
+      const newUser = await UserService.getUserById(user._id)
+      dispatch(setUser(newUser))
     }
   };
   useEffect(() => {
@@ -154,6 +160,13 @@ function Home() {
               >
                 Add
               </Button>
+              <List>
+                {items.map(({name,amount}) => (
+                  <ListItem>
+                  <ListItemText primary={`${name} : ${amount}`} />
+                </ListItem>
+                ))}
+              </List>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setDonationForm(false)}>Cancel</Button>
