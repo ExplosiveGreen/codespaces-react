@@ -1,108 +1,61 @@
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow} from '@react-google-maps/api';
 import { useDispatch,useSelector } from 'react-redux'
 import { addRoute,deleteRoute } from '../../../redux/actions/routes'
-import {useEffect, useState, useCallback, memo} from "react";
-
-const containerStyle = {
-  width: '90%',
-  height: '90vh'
-};
-
-const center = {
-    lat: 10.0,
-    lng: 10.0
-  };
-
+import {useEffect, useState} from "react";
+import {APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap} from "@vis.gl/react-google-maps";
+import LocationService from '../../../services/LocationService';
 function MyMap({locations, isDisplayRoute}) {
-
     const [open, setOpen] = useState(false);
-    
     const dispatch = useDispatch();
     // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
 
     const [lat, setLatitude] = useState(10.0);
     const [lng, setLongitude] = useState(10.0);
-
-    const { isLoaded } = useJsApiLoader({
-        id: import.meta.env.VITE_GOOGLE_MAP_ID,
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY
-    })
-    useState
-
-    const [map, setMap] = useState(null)
-    const [activeMarker, setActiveMarker] = useState(null);
-
-    const onLoad = useCallback(function callback(map) {
-        
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                setLatitude(position.coords.latitude);
-                setLongitude(position.coords.longitude);
-              },
-              (error) => {
-                console.error(error);
-              }
-            );
-          } else {
-            console.error('Geolocation is not supported by this browser.');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+          },
+          (error) => {
+            console.error(error);
           }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    return(
+        <APIProvider apiKey = {import.meta.env.VITE_GOOGLE_API_KEY}>
+            <div style={{height: "100vh", width: "100%"}}>
+                <Map zoom = {12} center={{ lat, lng }} mapId={import.meta.env.VITE_GOOGLE_MAP_ID} fullscreenControl={false} onClick={()=> setOpen(true)}>
+                       {/* This is where you insert your markers! */}
 
-        // const bounds = new window.google.maps.LatLngBounds(center);
-        // map.fitBounds(bounds);
-        setMap(map)
-  }, [navigator.geolocation,locations])
 
-    const onUnmount = useCallback(function callback(map) {
-        setMap(null)
-    }, [])
 
-    const handleActiveMarker = (marker) => {
-        setActiveMarker(marker);
-    };
-
-    function reportPost(markerid) {
-        console.log(markerid);
-    }
-    
-    return isLoaded ? (
-        <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={{ lat, lng }}
-        zoom={15}
-        id={import.meta.env.VITE_GOOGLE_MAP_ID} 
-        fullscreenControl={false}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-        >
-        { /* Child components, such as markers, info windows, etc. */ }
-        
-        {locations && locations.map((item, index)=>{
+                    {locations && locations.map(item=>{
                         const lat = item.location.lat, lng=item.location.lng;
-                        console.log('new marker:')
-                        console.log('lat: ',lat)
-                        console.log('lng: ',lng)
                         return <>
                         {item.location &&<>
-                            <Marker key={index} position={{ lat,lng }} onClick={() => handleActiveMarker(index)} onCloseClick={() => handleActiveMarker(none)}>
-                                {activeMarker === index ? (
-                                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                                                {item.element}
-          
-                                    </InfoWindow>
-                                ) : null}
-                            </Marker>
-                            </>}
+                            <AdvancedMarker position={{ lat,lng }}>
+                            {/*    Customizing the marker? here!*/}
+                                <Pin background={"grey"} borderColor={"green"} glyphColor={"blue"}></Pin>
+                            </AdvancedMarker>
+                            {open && <InfoWindow position={{ lat,lng }} onCloseClick={()=>setOpen(false)}>
+                                {item.element}
+                            </InfoWindow> }</>}
                         </>
                     })}
                     
                     {isDisplayRoute && <Directions routesList={routes}/>}
-        <></>
-        </GoogleMap>
-    ) : <></>
-}
-function Directions({routesList}){
+                </Map>
+            </div>
+    
+        </APIProvider>
+        );
+
+  }
+  
+  function Directions({routesList}){
     const map = useMap();
     const routesLibrary = useMapsLibrary("routes");
     const [directionsService, setDirectionsService] = useState();
@@ -169,4 +122,5 @@ function Directions({routesList}){
         </ul>
     </div>
 }
-export default memo(MyMap)
+
+  export default MyMap;
