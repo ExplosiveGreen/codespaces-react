@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow} from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, InfoWindowF, DirectionsRenderer, DirectionsService} from '@react-google-maps/api';
 import { useDispatch,useSelector } from 'react-redux'
 import { addRoute,deleteRoute } from '../../../redux/actions/routes'
 import {useEffect, useState, useCallback, memo} from "react";
@@ -33,6 +33,36 @@ function MyMap({locations, isDisplayRoute}) {
     const [map, setMap] = useState(null)
     const [activeMarker, setActiveMarker] = useState(null);
 
+    const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
+        null
+      )
+    // object for holding values of current route
+    const [directionsFormValue, setDirectionsFormValue] = useState({
+        origin: '',
+        destination: '',
+        travelMode: google.maps.TravelMode.DRIVING,
+    })
+
+
+    //2 objects holding references to current route's origin and destination
+    const originRef = useRef<HTMLInputElement | null>(null)
+    const destinationRef = useRef<HTMLInputElement | null>(null)
+
+    const directionsCallback = useCallback(
+        (
+          result,status
+        ) => {
+          if (result !== null) {
+            if (status === 'OK') {
+              setResponse(result)
+            } else {
+              console.log('response: ', result)
+            }
+          }
+        },
+        []
+      )
+
     const onLoad = useCallback(function callback(map) {
         
         if (navigator.geolocation) {
@@ -66,6 +96,28 @@ function MyMap({locations, isDisplayRoute}) {
         console.log(markerid);
     }
     
+    // sending to directions api your route destination, origin and travel mode.
+    const directionsServiceOptions =
+    useMemo<google.maps.DirectionsRequest>(() => {
+      return {
+        destination: directionsFormValue.destination,
+        origin: directionsFormValue.origin,
+        travelMode: directionsFormValue.travelMode,
+      }
+    }, [
+      directionsFormValue.origin,
+      directionsFormValue.destination,
+      directionsFormValue.travelMode,
+    ])
+
+    // getting response from directions api.
+    const directionsResult = useMemo(() => {
+        return {
+            directions: response,
+        }
+    }, [response])
+
+
     return isLoaded ? (
         <GoogleMap
         mapContainerStyle={containerStyle}
@@ -87,10 +139,10 @@ function MyMap({locations, isDisplayRoute}) {
                         {item.location &&<>
                             <Marker key={index} position={{ lat,lng }} onClick={() => handleActiveMarker(index)} onCloseClick={() => handleActiveMarker(none)}>
                                 {activeMarker === index ? (
-                                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                                    <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                                                 {item.element}
           
-                                    </InfoWindow>
+                                    </InfoWindowF>
                                 ) : null}
                             </Marker>
                             </>}
