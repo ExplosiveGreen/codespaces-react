@@ -1,4 +1,3 @@
-import { GoogleMap, useJsApiLoader, Marker, InfoWindowF, DirectionsRenderer, DirectionsService} from '@react-google-maps/api';
 import { useDispatch,useSelector } from 'react-redux'
 import { addRoute,deleteRoute } from '../../../redux/actions/routes'
 import {useEffect, useState, useCallback, memo, useRef} from "react";
@@ -17,8 +16,7 @@ function MyMap({locations, isDisplayRoute}) {
     // let callCounter = 0
     // console.log('test 0 - how many times am I called? it`s ', callCounter++)
     const [open, setOpen] = useState(false);
-    
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
 
