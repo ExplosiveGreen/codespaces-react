@@ -86,7 +86,6 @@ function DonatorHome() {
          >
           <MenuItem><Checkbox value={check} onClick={()=> setcheck(!check)}/>have donation request</MenuItem>
           <MenuItem><Select>
-            {locations.}
             </Select></MenuItem>
           <MenuItem>yinon</MenuItem>
          </Menu>
