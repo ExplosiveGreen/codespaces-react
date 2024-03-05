@@ -67,11 +67,7 @@ function OrgHome() {
   ];
 
   const deleteDonationRequest = async (id) => {
-    const result = await DonationService.deleteDonationRequest(id);
-    dispatch(setUser({
-      ...user,
-      donation_requests: (user.donation_requests || []).filter(dr => dr._id != id),
-    }))
+    console.log(id);
   };
   const saveDonation = async (event) => {
     event.preventDefault();

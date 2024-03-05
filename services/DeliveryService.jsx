@@ -17,12 +17,4 @@ export default class DeliveryService {
             console.log(e)
         }
     }
-    static async deleteDelivery (id) {
-        try{
-        const result = await axios.delete(`https://givehub-server.onrender.com/api/deliveries/${id}`)
-        return result.data;
-        }catch(e) {
-            console.log(e)
-        }
-    }
 }
