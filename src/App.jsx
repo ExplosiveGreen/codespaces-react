@@ -9,7 +9,7 @@ function App() {
   const router = createBrowserRouter(
   routes.filter(item => 
     (!user && item.auth.includes('noauth')) ||
-    (user && item.auth.some(item2 => user.auth.includes(item2)))
+    (user && item.auth.includes(user.__t))
   )
 );
   return (
