@@ -79,10 +79,6 @@ function MyMap({locations, isDisplayRoute}) {
     const handleActiveMarker = (marker) => {
         setActiveMarker(marker);
     };
-
-    function reportPost(markerid) {
-        console.log(markerid);
-    }
     
     const directionsCallback = (googleResponse) => {
         if (googleResponse) {
@@ -115,17 +111,11 @@ function MyMap({locations, isDisplayRoute}) {
         onLoad={onLoad}
         onUnmount={onUnmount}
         >
-            {/* <>
-            {console.log('Returning map')}
-            </> */
-            isLoaded? console.log('loaded'):console.log('not loaded')
-            }
             
         { /* Child components, such as markers, info windows, etc. */ }
         {/* This is called TOO MANY TIMES!!! */}
         {locations && isLoaded && locations.map((item, index)=>{
-            const lat = item.location.lat, lng=item.location.lng;
-            console.log('New iteration:')
+            const lat = item.location.lat , lng=item.location.lng;
             return <>
             {item.location &&<>
                 <Marker key={index} position={{ lat,lng }} onClick={() => handleActiveMarker(index)} onCloseClick={() => handleActiveMarker(none)}>

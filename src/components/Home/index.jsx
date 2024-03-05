@@ -33,33 +33,32 @@ function Home() {
     if (user.__t !== "org") {
       if (user.__t == "donator") {
         const result = await UserService.getAllOrganizations();
-        setLocations(
-          result.map((org) => {
-            return {
-              location: {
-                lat: org.location.latitude,
-                lng: org.location.longitude,
-              },
-              element: (
-                <>
-                  <List>
-                    {org.donation_requests.map((dont) =>
-                      <ListItem><List>
-                        {dont.items.map(({ name, amount }) => (
-                          <ListItem>
-                            <ListItemText primary={`${name} : ${amount}`} />
-                          </ListItem>
-                        ))}
-                        </List>
-                        <Button>Accept</Button>
-                      </ListItem>
-                    )}
-                  </List>
-                </>
-              ),
-            };
-          })
-        );
+        const new_list = result.filter(filter => 'location' in filter).map((org) => {
+          return {
+            location: {
+              lat: org.location.latitude,
+              lng: org.location.longitude,
+            },
+            element: (
+              <>
+                <List>
+                  {org.donation_requests.map((dont) =>
+                    <ListItem><List>
+                      {dont.items.map(({ name, amount }) => (
+                        <ListItem>
+                          <ListItemText primary={`${name} : ${amount}`} />
+                        </ListItem>
+                      ))}
+                      </List>
+                      <Button>Accept</Button>
+                    </ListItem>
+                  )}
+                </List>
+              </>
+            ),
+          };
+        })
+        setLocations(new_list);
       }
     }
   };
