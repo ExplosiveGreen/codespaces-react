@@ -1,27 +1,16 @@
-import * as React from 'react';
 import routes from '../../router';
 import { useSelector } from 'react-redux';
 import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import { useEffect, useState } from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box, Button, Dialog, DialogTitle } from '@mui/material';
 import MyTable from '../MyTable';
 import DeliveryService from '../../../services/DeliveryService';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 function DonatorDeliveries() {
   const [tableData, setTableData] = useState([])
   const [editDelivery, setEditDelivery] = useState(null);
   const [deliveryForm, setDeliveryForm] = useState(false);
-  const [date, setDate] = React.useState(dayjs('2022-04-17'));
   const user = useSelector((state) => state.user.user)
   useEffect(() => {
     const fetchData = async () => {
@@ -41,22 +30,6 @@ function DonatorDeliveries() {
       delivery_requests: (user.delivery_requests || []).filter(dr => dr != id),
     }))
   }
-  const saveDelivery = async (event) => {
-    event.preventDefault();
-    console.log(date.format('YYYY-MM-DDTHH:MM:00.00Z'),date.toISOString())
-    const result = await DeliveryService.updateDelivery({
-      ...editDelivery,
-      delivery_date: date.format('YYYY-MM-DDTHH:MM:00.00')
-    });
-    if (result) {
-      setTableData(tableData.map(data => {
-        if (editDelivery._id == data._id) return result;
-        return data;
-      }))
-      setDeliveryForm(false)
-      setEditDelivery(null)
-    }
-  }
   const columns = [
     { id: 'id', label: 'ID', accessor: (row) => row._id },
     { id: 'donator', label: 'Donator', accessor: (row) => row.donator.name },
@@ -69,7 +42,6 @@ function DonatorDeliveries() {
           <Button
             onClick={() => {
               setEditDelivery(row);
-              setDate(dayjs.tz(row.delivery_date,'America/New_York'))
               setDeliveryForm(true);
             }}
           >
@@ -98,26 +70,65 @@ function DonatorDeliveries() {
           onClose={() => setDeliveryForm(false)}
           PaperProps={{
             component: "form",
-            onSubmit: saveDelivery,
+            onSubmit: saveDonation,
           }}
         >
           <DialogTitle>
-            Edit delivery request
+            Edit donation request
           </DialogTitle>
           <DialogContent>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DateTimePicker']}>
-                <DateTimePicker
-                  label="DateTime picker"
-                  value={date}
-                  onChange={(newDate) =>{ console.log(dayjs.tz(newDate,'America/New_York'));setDate(dayjs.tz(newDate,'America/New_York'))}}
-                  format="MM/DD/YYYY hh:mm A"
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+            <List>
+              {items.map(({ name, amount }, index) => (
+                <ListItem>
+                  <TextField
+                    autoFocus
+                    required
+                    disabled
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    value={name}
+                    onChange={({ target }) => {
+                      const new_item = { name: target.value, amount };
+                      setItems(
+                        items.map((i, ind) => {
+                          if (ind == index) return new_item;
+                          return i;
+                        })
+                      );
+                    }}
+                  />
+                  <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="name"
+                    name="amount"
+                    type="number"
+                    value={amount}
+                    onChange={({ target }) => {
+                      const new_item = { name, amount: target.value };
+                      setItems(
+                        items.map((i, ind) => {
+                          if (ind == index) return new_item;
+                          return i;
+                        })
+                      );
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      setItems(items.filter((i, ind) => ind != index));
+                    }}
+                  >
+                    Del
+                  </Button>
+                </ListItem>
+              ))}
+            </List>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setDeliveryForm(false)}>Cancel</Button>
+            <Button onClick={() => setDonationForm(false)}>Cancel</Button>
             <Button type="submit">Save</Button>
           </DialogActions>
         </Dialog>
