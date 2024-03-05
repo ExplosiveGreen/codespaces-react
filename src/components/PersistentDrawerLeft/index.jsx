@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { Menu, MenuItem } from '@mui/material';
@@ -71,6 +71,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerLeft({children,headerText,drawList}) {
   const dispatch = useDispatch()
   const theme = useTheme();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -134,8 +135,11 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
                  open={Boolean(anchorEl)}
                  onClose={handleClose}
                >
-                 <MenuItem><Link to='profile'>Profile</Link></MenuItem>
-                 <MenuItem onClick={()=>dispatch(setUser(null))}>Logout</MenuItem>
+                 <MenuItem><Link style={{textDecoration:'none', color:'black'}} to='profile'>Profile</Link></MenuItem>
+                 <MenuItem onClick={()=>{
+                    dispatch(setUser(null))
+                    navigate('/')
+                  }}>Logout</MenuItem>
                </Menu>
             </div>
         </Toolbar>
@@ -161,7 +165,7 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
         <Divider />
         <List>
           {drawList.map(({name,icon,path}) => (
-            <Link to={path}>
+            <Link style={{textDecoration:'none', color:'black'}} to={path}>
             <ListItem key={name} disablePadding>
               <ListItemButton>
                 <ListItemIcon>

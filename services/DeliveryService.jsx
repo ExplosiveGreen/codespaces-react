@@ -9,4 +9,12 @@ export default class DeliveryService {
             console.log(e)
         }
     }
+    static async getDeliverieById (id) {
+        try{
+        const result = await axios.get(`https://givehub-server.onrender.com/api/deliveries/${id}`)
+        return result.data;
+        }catch(e) {
+            console.log(e)
+        }
+    }
 }

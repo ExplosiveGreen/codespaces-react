@@ -18,7 +18,9 @@ import {
 } from "@mui/material";
 import DonationService from "../../../services/DonationService";
 import UserService from "../../../services/UserService";
-import {setUser} from "../../../redux/actions/user";
+import { setUser } from "../../../redux/actions/user";
+import OrgHome from "./OrgHome";
+import DonatorHome from "./DonatorHome";
 
 function Home() {
   const user = useSelector((state) => state.user.user);
@@ -26,42 +28,11 @@ function Home() {
   const [donationForm, setDonationForm] = useState(false);
   const [item, setItem] = useState({});
   const [items, setItems] = useState([]);
+  const [editDonation, setEditDonation] = useState(null)
   let { generate } = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  console.log(user)
 
-  const getLocations = async () => {
-    if (user.__t !== "org") {
-      if (user.__t == "donator") {
-        const result = await UserService.getAllOrganizations();
-        const new_list = result.filter(filter => 'location' in filter).map((org) => {
-          return {
-            location: {
-              lat: org.location.latitude,
-              lng: org.location.longitude,
-            },
-            element: (
-              <>
-                <List>
-                  {org.donation_requests.map((dont) =>
-                    <ListItem><List>
-                      {dont.items.map(({ name, amount }) => (
-                        <ListItem>
-                          <ListItemText primary={`${name} : ${amount}`} />
-                        </ListItem>
-                      ))}
-                      </List>
-                      <Button>Accept</Button>
-                    </ListItem>
-                  )}
-                </List>
-              </>
-            ),
-          };
-        })
-        setLocations(new_list);
-      }
-    }
-  };
   const columns = [
     { id: "id", label: "ID", accessor: (row) => row._id },
     {
@@ -78,22 +49,103 @@ function Home() {
       ),
     },
     { id: "status", label: "Status", accessor: (row) => row.status },
+    {
+      id: "actions",
+      lable: "Actations",
+      accessor: (row) => (
+        <>
+          <Button
+            onClick={() => {
+              setItems(row.items);
+              setEditDonation(row)
+              setDonationForm(true);
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={() => {
+              deleteDonationRequest(row._id);
+            }}
+          >
+            delete
+          </Button>
+        </>
+      ),
+    },
   ];
+
+  const getLocations = async () => {
+    if (user.__t !== "org") {
+      if (user.__t == "donator") {
+        const result = await UserService.getAllOrganizations();
+        const new_list = result
+          .filter((filter) => "location" in filter)
+          .map((org) => {
+            return {
+              location: {
+                lat: org.location.latitude,
+                lng: org.location.longitude,
+              },
+              element: (
+                <>
+                  <List>
+                    {org.donation_requests.map((dont) => (
+                      <ListItem>
+                        <List>
+                          {dont.items.map(({ name, amount }) => (
+                            <ListItem>
+                              <ListItemText primary={`${name} : ${amount}`} />
+                            </ListItem>
+                          ))}
+                        </List>
+                        <Button>Accept</Button>
+                      </ListItem>
+                    ))}
+                  </List>
+                </>
+              ),
+            };
+          });
+        setLocations(new_list);
+      }
+    }
+  };
+  const deleteDonationRequest = async (id) => {
+    console.log(id);
+  };
   const saveDonation = async (event) => {
     event.preventDefault();
-    const resultId = await DonationService.putDonationRequest({
-      items,
-      status: "Pending",
-    });
-    if (resultId) {
-      const result = await UserService.putDonationOrganization(
-        user._id,
-        resultId
-      );
-      setDonationForm(false);
-      const newUser = await UserService.getUserById(user._id)
-      if(newUser) dispatch(setUser(newUser))
+    let newUser;
+    if (!editDonation) {
+      const resultId = await DonationService.putDonationRequest({
+        items,
+        status: "Pending",
+      });
+      if (resultId) {
+        newUser = {
+          ...user,
+          donation_requests: [...(user.donation_requests || []), resultId],
+        };
+        console.log('add',newUser)
+        const result = await UserService.putDonationOrganization(
+          user._id,
+          newUser
+        );
+      }
+    } else {
+      const resultId = await DonationService.updateDonationRequest({
+        ...editDonation,
+        items,
+      });
+      console.log(resultId)
+      newUser = {
+        ...user,
+        donation_requests: [...(user.donation_requests || [])],
+      };
     }
+    dispatch(setUser(newUser));
+    setDonationForm(false);
   };
   useEffect(() => {
     getLocations();
@@ -107,70 +159,11 @@ function Home() {
         )
       )}
     >
-      {user.__t !== "org" && locations && (
-        <Map locations={locations} isDisplayRoute={Boolean(generate)} />
-      )}
       {user.__t == "org" && (
-        <>
-          <Button onClick={() => setDonationForm(true)}>
-            Add Donation Request
-          </Button>
-          <MyTable columns={columns} tableData={user.donation_requests} />
-          <Dialog
-            open={donationForm}
-            onClose={() => setDonationForm(false)}
-            PaperProps={{
-              component: "form",
-              onSubmit: saveDonation,
-            }}
-          >
-            <DialogTitle>Add donation request</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                required
-                margin="dense"
-                id="name"
-                name="name"
-                label="Item name"
-                onChange={({ target }) =>
-                  setItem({ ...item, [target.name]: target.value })
-                }
-              />
-              <TextField
-                autoFocus
-                required
-                margin="dense"
-                id="name"
-                name="amount"
-                label="amount"
-                type="number"
-                onChange={({ target }) =>
-                  setItem({ ...item, [target.name]: parseInt(target.value) })
-                }
-              />
-              <Button
-                onClick={() => {
-                  setItems([...items, item]);
-                  setItem({});
-                }}
-              >
-                Add
-              </Button>
-              <List>
-                {items.map(({name,amount}) => (
-                  <ListItem>
-                  <ListItemText primary={`${name} : ${amount}`} />
-                </ListItem>
-                ))}
-              </List>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDonationForm(false)}>Cancel</Button>
-              <Button type="submit">Save</Button>
-            </DialogActions>
-          </Dialog>
-        </>
+        <OrgHome />
+      )}
+      {user.__t == "donator" && (
+        <DonatorHome/>
       )}
     </PersistentDrawerLeft>
   );

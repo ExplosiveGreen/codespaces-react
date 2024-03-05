@@ -28,7 +28,6 @@ function MyMap({locations, isDisplayRoute}) {
         id: import.meta.env.VITE_GOOGLE_MAP_ID,
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY
     })
-    useState
     const waypts = [];
     const [map, setMap] = useState(null)
     const [activeMarker, setActiveMarker] = useState(null)
@@ -130,11 +129,10 @@ function MyMap({locations, isDisplayRoute}) {
             </>
         })}
         
-        {isDisplayRoute && <DirectionsMap origin={{lat, lng}} destination='' locations={locations}/>}
-        {isLoaded && <>
+        {isLoaded && isDisplayRoute && <>
             <div>
           <>
-            {
+            {/* {
                 waypts.push({
                     location:{lat:32.151119, lng: 34.845105},
                     stopover: true,
@@ -145,7 +143,7 @@ function MyMap({locations, isDisplayRoute}) {
                     location:{lat:32.170437, lng:34.844282},
                     stopover: true,
                 })
-            }
+            } */}
             {destination !== '' && origin !== '' && (
               <DirectionsService 
                 options={{

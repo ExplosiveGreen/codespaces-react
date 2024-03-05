@@ -6,6 +6,8 @@ import HomeIcon from "@mui/icons-material/Home"
 import DonatorDeliveries from './components/Donator/DonatorDeliveries';
 import { DeliveryDining, VolunteerActivism } from '@mui/icons-material';
 import DonatorDonations from './components/Donator/DonatorDonations';
+import OrgDeliveries from './components/Organization/OrgDeliveries';
+import OrgDonations from './components/Organization/OrgDonations';
 export default [
       {
         path: "/",
@@ -25,6 +27,20 @@ export default [
         path: "/donations",
         element: <DonatorDonations/>,
         auth:['donator'],
+        name: "Donations",
+        icon: <VolunteerActivism/>,
+      },
+      {
+        path: "/deliveries",
+        element: <OrgDeliveries/>,
+        auth:['org'],
+        name: "Deliveries",
+        icon: <DeliveryDining/>,
+      },
+      {
+        path: "/donations",
+        element: <OrgDonations/>,
+        auth:['org'],
         name: "Donations",
         icon: <VolunteerActivism/>,
       },

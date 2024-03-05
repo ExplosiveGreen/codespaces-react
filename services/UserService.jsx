@@ -21,11 +21,9 @@ export default class UserService {
       console.log(e);
     }
   }
-  static async putDonationOrganization(org_id,donation_id){
+  static async putDonationOrganization(org_id,data){
     try {
-      const result = await axios.put(`https://givehub-server.onrender.com/api/users?_id=${org_id}`,{
-        id:donation_id
-      });
+      const result = await axios.put(`https://givehub-server.onrender.com/api/users/${org_id}`,data);
       return result.data;
     } catch (e) {
       console.log(e);
