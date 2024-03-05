@@ -25,4 +25,12 @@ export default class DeliveryService {
             console.log(e)
         }
     }
+    static async updateDelivery (delivery) {
+        try{
+            const result = await axios.put(`https://givehub-server.onrender.com/api/deliveries/${delivery._id}`,delivery)
+            return result.data;
+        }catch(e) {
+            console.log(e)
+        }
+    }
 }

@@ -21,6 +21,14 @@ export default class UserService {
       console.log(e);
     }
   }
+  static async updateUser(user) {
+    try {
+      const result = await axios.put(`https://givehub-server.onrender.com/api/users/${user._id}`,user);
+      return result.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
   static async putDonationOrganization(org_id,data){
     try {
       const result = await axios.put(`https://givehub-server.onrender.com/api/users/${org_id}`,data);
