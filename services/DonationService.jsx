@@ -25,4 +25,12 @@ export default class DonationService {
             console.log(e)
         }
     }
+    static async deleteDonationRequest (id) {
+        try{
+            const result = await axios.delete(`https://givehub-server.onrender.com/api/donations/${id}`)
+            return result.data;
+        }catch(e) {
+            console.log(e)
+        }
+    }
 }
