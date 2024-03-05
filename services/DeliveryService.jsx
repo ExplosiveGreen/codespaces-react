@@ -1,12 +1,24 @@
-import axios from "axios";
-
 export default class DeliveryService {
     static async getDonatorDeliveries (user) {
-        try{
-        const result = await axios.get("https://givehub-server.onrender.com/api/deliveries")
-        return result.data;
-        }catch(e) {
-            console.log(e)
-        }
+        return [
+            {Id:1,
+            Donator:{name:'hfghf'},
+            Organization:{name:'hfghfghfg'},
+            Delivery_date:Date('12.2.2024'),
+            status:'finished',
+            donation:{
+                items:[{name:'shirts', amount:50},{name:'shoes', amount:50}],
+                status:'finished'
+            }},
+            {Id:2,
+                Donator:{name:'hfghf'},
+                Organization:{name:'hfghfghfg'},
+                Delivery_date:Date('13.2.2024'),
+                status:'finished',
+                donation:{
+                    items:[{name:'shirts', amount:50},{name:'shoes', amount:50}],
+                    status:'finished'
+            }}
+        ];
     }
 }
