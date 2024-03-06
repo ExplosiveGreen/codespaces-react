@@ -45,4 +45,12 @@ export default class UserService {
       console.log(e);
     }
   }
+  static async getAllDonators(){
+    try {
+      const result = await axios.get(`https://givehub-server.onrender.com/api/users?__t=donator`);
+      return result.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }

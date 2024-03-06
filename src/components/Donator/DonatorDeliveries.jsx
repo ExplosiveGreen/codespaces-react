@@ -43,7 +43,6 @@ function DonatorDeliveries() {
   }
   const saveDelivery = async (event) => {
     event.preventDefault();
-    console.log(date.format('YYYY-MM-DDTHH:MM:00.00Z'),date.toISOString())
     const result = await DeliveryService.updateDelivery({
       ...editDelivery,
       delivery_date: date.format('YYYY-MM-DDTHH:MM:00.00')
@@ -110,7 +109,7 @@ function DonatorDeliveries() {
                 <DateTimePicker
                   label="DateTime picker"
                   value={date}
-                  onChange={(newDate) =>{ console.log(dayjs.tz(newDate,'America/New_York'));setDate(dayjs.tz(newDate,'America/New_York'))}}
+                  onChange={(newDate) =>{setDate(dayjs.tz(newDate,'America/New_York'))}}
                   format="MM/DD/YYYY hh:mm A"
                 />
               </DemoContainer>

@@ -16,9 +16,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, LocalGroceryStore } from '@mui/icons-material';
 import { Menu, MenuItem } from '@mui/material';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../../redux/actions/user'
 
 const drawerWidth = 240;
@@ -68,13 +68,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft({children,headerText,drawList}) {
+export default function PersistentDrawerLeft({ children, headerText, drawList }) {
   const dispatch = useDispatch()
   const theme = useTheme();
+  const user = useSelector((state) => state.user.user);
+  const routes = useSelector((state) => state.routes.routes)
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [StoreAnchorEl, setStoreAnchorEl] = useState(null);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -82,6 +85,14 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleStoreMenu = (event) => {
+    setStoreAnchorEl(event.currentTarget);
+  };
+
+  const handleStoreClose = () => {
+    setStoreAnchorEl(null);
   };
 
   const handleDrawerOpen = () => {
@@ -110,38 +121,72 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
             {headerText}
           </Typography>
           <div>
-               <IconButton
-                 size="large"
-                 aria-label="account of current user"
-                 aria-controls="menu-appbar"
-                 aria-haspopup="true"
-                 onClick={handleMenu}
-                 color="inherit"
-               >
-                 <AccountCircle />
-               </IconButton>
-               <Menu
-                 id="menu-appbar"
-                 anchorEl={anchorEl}
-                 anchorOrigin={{
-                   vertical: 'top',
-                   horizontal: 'right',
-                 }}
-                 keepMounted
-                 transformOrigin={{
-                   vertical: 'top',
-                   horizontal: 'right',
-                 }}
-                 open={Boolean(anchorEl)}
-                 onClose={handleClose}
-               >
-                 <MenuItem><Link style={{textDecoration:'none', color:'black'}} to='profile'>Profile</Link></MenuItem>
-                 <MenuItem onClick={()=>{
-                    dispatch(setUser(null))
-                    navigate('/')
-                  }}>Logout</MenuItem>
-               </Menu>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem><Link style={{ textDecoration: 'none', color: 'black' }} to='profile'>Profile</Link></MenuItem>
+              <MenuItem onClick={() => {
+                dispatch(setUser(null))
+                navigate('/')
+              }}>Logout</MenuItem>
+            </Menu>
+          </div>
+          {user.__t == 'carrier' && (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleStoreMenu}
+                color="inherit"
+              >
+                <LocalGroceryStore />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={StoreAnchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(StoreAnchorEl)}
+                onClose={handleStoreClose}
+              >
+                {Array.isArray(routes) && routes.map(route => (
+                  <MenuItem>({route.lat},{route.lng})</MenuItem>
+                ))}
+                <MenuItem><Link to='/generate/true'>generate</Link></MenuItem>
+              </Menu>
             </div>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -164,23 +209,23 @@ export default function PersistentDrawerLeft({children,headerText,drawList}) {
         </DrawerHeader>
         <Divider />
         <List>
-          {drawList.map(({name,icon,path}) => (
-            <Link style={{textDecoration:'none', color:'black'}} to={path}>
-            <ListItem key={name} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItemButton>
-            </ListItem>
+          {drawList.map(({ name, icon, path }) => (
+            <Link style={{ textDecoration: 'none', color: 'black' }} to={path}>
+              <ListItem key={name} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText primary={name} />
+                </ListItemButton>
+              </ListItem>
             </Link>
           ))}
         </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-          {children}
+        {children}
       </Main>
     </Box>
   );

@@ -21,6 +21,7 @@ import UserService from "../../../services/UserService";
 import { setUser } from "../../../redux/actions/user";
 import OrgHome from "./OrgHome";
 import DonatorHome from "./DonatorHome";
+import CarrierHome from "./CarrierHome";
 
 function Home() {
   const user = useSelector((state) => state.user.user);
@@ -164,6 +165,9 @@ function Home() {
       )}
       {user.__t == "donator" && (
         <DonatorHome/>
+      )}
+      {user.__t == "carrier" && (
+        <CarrierHome/>
       )}
     </PersistentDrawerLeft>
   );
