@@ -8,8 +8,20 @@ export default class UserService {
     return result.data;
   }
   static async getUserById(userId) {
-    const result = await axios.get(`https://givehub-server.onrender.com/api/users?_id=${userId}`);
+    const result = await axios.get(
+      `https://givehub-server.onrender.com/api/users?_id=${userId}`
+    );
     return result.data;
+  }
+  static async getUser(email, password) {
+    try {
+      const result = await axios.get(
+        `https://givehub-server.onrender.com/api/users?email=${email}&password=${password}`
+      );
+      return result.data;
+    } catch (e) {
+      console.log(e);
+    }
   }
   static async getAllUser() {
     try {
@@ -23,31 +35,41 @@ export default class UserService {
   }
   static async updateUser(user) {
     try {
-      const result = await axios.put(`https://givehub-server.onrender.com/api/users/${user._id}`,user);
+      const result = await axios.put(
+        `https://givehub-server.onrender.com/api/users/${user._id}`,
+        user
+      );
       return result.data;
     } catch (e) {
       console.log(e);
     }
   }
-  static async putDonationOrganization(org_id,data){
+  static async putDonationOrganization(org_id, data) {
     try {
-      const result = await axios.put(`https://givehub-server.onrender.com/api/users/${org_id}`,data);
+      const result = await axios.put(
+        `https://givehub-server.onrender.com/api/users/${org_id}`,
+        data
+      );
       return result.data;
     } catch (e) {
       console.log(e);
     }
   }
-  static async getAllOrganizations(){
+  static async getAllOrganizations() {
     try {
-      const result = await axios.get(`https://givehub-server.onrender.com/api/users?__t=org`);
+      const result = await axios.get(
+        `https://givehub-server.onrender.com/api/users?__t=org`
+      );
       return result.data;
     } catch (e) {
       console.log(e);
     }
   }
-  static async getAllDonators(){
+  static async getAllDonators() {
     try {
-      const result = await axios.get(`https://givehub-server.onrender.com/api/users?__t=donator`);
+      const result = await axios.get(
+        `https://givehub-server.onrender.com/api/users?__t=donator`
+      );
       return result.data;
     } catch (e) {
       console.log(e);
