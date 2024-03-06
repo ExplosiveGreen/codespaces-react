@@ -1,6 +1,6 @@
 import * as React from "react";
 import routes from "../../router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import { useEffect, useState } from "react";
 import {
@@ -22,11 +22,12 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { socket } from "../../../socket";
 import UserService from "../../../services/UserService";
-
+import { setUser } from "../../../redux/actions/user";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function DonatorDeliveries() {
+  const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [editDelivery, setEditDelivery] = useState(null);
   const [deliveryForm, setDeliveryForm] = useState(false);
@@ -45,9 +46,8 @@ function DonatorDeliveries() {
   }, []);
   const deleteDelivery = async (id) => {
     const result = await DeliveryService.deleteDelivery(id);
-
     if (result) {
-      socket.emit("deleteDelivery", id);
+      socket.emit("deleteDelivery", result);
       const updateDalivery = await UserService.updateUser({
         ...user,
         delivery_requests: (user.delivery_requests || []).filter(

@@ -31,6 +31,7 @@ function Home() {
   const [item, setItem] = useState({});
   const [items, setItems] = useState([]);
   const [editDonation, setEditDonation] = useState(null);
+  const [isConnected, setIsConnected] = useState(socket.connected);
   let { generate } = useParams();
   const dispatch = useDispatch();
   console.log(user);
@@ -172,7 +173,7 @@ function Home() {
   return (
     <PersistentDrawerLeft
       headerText="GiveHub"
-      drawList={routes.filter(
+      drawList={(routes || []).filter(
         (item) => (
           user && "name", "icon" in item && item.auth.includes(user.__t)
         )
