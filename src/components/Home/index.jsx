@@ -22,6 +22,7 @@ import { setUser } from "../../../redux/actions/user";
 import OrgHome from "./OrgHome";
 import DonatorHome from "./DonatorHome";
 import CarrierHome from "./CarrierHome";
+import { socket } from "../../../socket";
 
 function Home() {
   const user = useSelector((state) => state.user.user);
@@ -29,11 +30,28 @@ function Home() {
   const [donationForm, setDonationForm] = useState(false);
   const [item, setItem] = useState({});
   const [items, setItems] = useState([]);
-  const [editDonation, setEditDonation] = useState(null)
+  const [editDonation, setEditDonation] = useState(null);
   let { generate } = useParams();
   const dispatch = useDispatch();
-  console.log(user)
+  console.log(user);
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+      socket.emit("join", user._id);
+    }
 
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
   const columns = [
     { id: "id", label: "ID", accessor: (row) => row._id },
     {
@@ -58,7 +76,7 @@ function Home() {
           <Button
             onClick={() => {
               setItems(row.items);
-              setEditDonation(row)
+              setEditDonation(row);
               setDonationForm(true);
             }}
           >
@@ -128,7 +146,7 @@ function Home() {
           ...user,
           donation_requests: [...(user.donation_requests || []), resultId],
         };
-        console.log('add',newUser)
+        console.log("add", newUser);
         const result = await UserService.putDonationOrganization(
           user._id,
           newUser
@@ -139,7 +157,7 @@ function Home() {
         ...editDonation,
         items,
       });
-      console.log(resultId)
+      console.log(resultId);
       newUser = {
         ...user,
         donation_requests: [...(user.donation_requests || [])],
@@ -160,15 +178,9 @@ function Home() {
         )
       )}
     >
-      {user.__t == "org" && (
-        <OrgHome />
-      )}
-      {user.__t == "donator" && (
-        <DonatorHome/>
-      )}
-      {user.__t == "carrier" && (
-        <CarrierHome/>
-      )}
+      {user.__t == "org" && <OrgHome />}
+      {user.__t == "donator" && <DonatorHome />}
+      {user.__t == "carrier" && <CarrierHome />}
     </PersistentDrawerLeft>
   );
 }

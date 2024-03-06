@@ -3,6 +3,7 @@ import UserService from "../../../services/UserService";
 import { setUser } from "../../../redux/actions/user";
 import { useDispatch } from "react-redux";
 import { Button, Container, TextField } from "@mui/material";
+import { socket } from "../../../socket";
 
 function Login() {
   const [users, setUsers] = useState([]);
@@ -31,6 +32,7 @@ function Login() {
     );
     if (user1 && Object.entries(user1).length > 0) {
       setUsers(user1);
+      socket.connect();
       dispatch(setUser(user1[0]));
 
       // const validuser = users.find(
