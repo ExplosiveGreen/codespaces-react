@@ -80,7 +80,7 @@ function MyMap({locations, isDisplayRoute}) {
             location:{lat:32.170437, lng:34.844282},
             stopover: true,
         })
-        setDestination({lat:34.800792,lng:32.083366})
+        setDestination({lat:32.083366,lng:34.800792})
         
   }, [navigator.geolocation,locations])
 
@@ -148,8 +148,8 @@ function MyMap({locations, isDisplayRoute}) {
             {destination !== '' && origin !== '' && (
               <DirectionsService 
                 options={{
-                  origin,
-                  destination,
+                  origin: origin,
+                  destination: destination,
                   waypoints: waypts,
                   optimizeWaypoints: true,
                   travelMode: 'DRIVING'
