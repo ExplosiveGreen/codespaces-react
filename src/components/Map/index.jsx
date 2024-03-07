@@ -20,9 +20,8 @@ function MyMap({locations, isDisplayRoute}) {
     const dispatch = useDispatch()
     // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
-
-    const [lat, setLatitude] = useState(10.0);
-    const [lng, setLongitude] = useState(10.0);
+    const [lat, setLatitude] = useState(32.086759);
+    const [lng, setLongitude] = useState(34.789888);
 
     const { isLoaded } = useJsApiLoader({
         id: import.meta.env.VITE_GOOGLE_MAP_ID,
@@ -56,8 +55,22 @@ function MyMap({locations, isDisplayRoute}) {
             console.error('Geolocation is not supported by this browser.');
           }
 
-        // const bounds = new window.google.maps.LatLngBounds(center);
-        // map.fitBounds(bounds);
+        //THIS FUNCTIONS SETS ALL LOCATIONS LOADED INTO THE ROUTE. DO NOT USE UNTIL YOU GET ONLY SPECIFIC ONES!!!!
+    
+        // locations.map((item, index)=>{
+        //     const lat = item.location.lat, lng=item.location.lng;
+        //     console.log('New stop in route!')
+        //     waypts.push({
+        //         location:{lat,lng},
+        //         stopOver: true
+        //     })
+        //     setDestination({lat,lng})
+        // })
+        //
+        //waypts.pop();
+        
+        // this is mock data:
+          
         setMap(map)
         waypts.push({
             location:{lat:32.151119, lng: 34.845105},
@@ -67,7 +80,7 @@ function MyMap({locations, isDisplayRoute}) {
             location:{lat:32.170437, lng:34.844282},
             stopover: true,
         })
-        setDestination({lat:32.504235,lng:35.001531})
+        setDestination({lat:34.800792,lng:32.083366})
         
   }, [navigator.geolocation,locations])
 
@@ -132,18 +145,6 @@ function MyMap({locations, isDisplayRoute}) {
         {isLoaded && isDisplayRoute && <>
             <div>
           <>
-            {/* {
-                waypts.push({
-                    location:{lat:32.151119, lng: 34.845105},
-                    stopover: true,
-                })
-            }
-            {
-                waypts.push({
-                    location:{lat:32.170437, lng:34.844282},
-                    stopover: true,
-                })
-            } */}
             {destination !== '' && origin !== '' && (
               <DirectionsService 
                 options={{
@@ -172,157 +173,4 @@ function MyMap({locations, isDisplayRoute}) {
     ) : <></>
 }
 
-function DirectionsMap(props) {
-    const waypts = [];
-    const {origin, destination,locations } = props;
-    const [mLocations,setLocations] = useState(props[2])
-    const [mOrigin, setOrigin] = useState(props[0])
-    const [mDestination, setDestination] = useState(props[1])
-    const [route, setRoute] = useState(null)
-    const [response, setResponse] = useState(null);
-
-    //THIS FUNCTIONS SETS ALL LOCATIONS LOADED INTO THE ROUTE. DO NOT USE UNTIL YOU GET ONLY SPECIFIC ONES!!!!
-    
-    // locations.map((item, index)=>{
-    //     const lat = item.location.lat, lng=item.location.lng;
-    //     console.log('New stop in route!')
-    //     waypts.push({
-    //         location:{lat,lng},
-    //         stopOver: true
-    //     })
-    //     setDestination({lat,lng})
-    // })
-    //
-    //waypts.pop();
-    
-    // this is mock data:
-
-    waypts.push({
-        location:{lat:32.151119, lng: 34.845105},
-        stopover: true,
-    })
-    waypts.push({
-        location:{lat:32.170437, lng:34.844282},
-        stopover: true,
-    })
-
-    setDestination({lat:32.504235,lng:35.001531})
-    // end of mock data
-
-    const directionsCallback = (googleResponse) => {
-      if (googleResponse) {
-        if(response) {
-          if (googleResponse.status === 'OK' && googleResponse.routes.overview_polyline !== response.routes.overview_polyline) {
-            setResponse(() => googleResponse)
-            setRoute(googleResponse.routes[0])
-          } else {
-            console.log('response: ', googleResponse)
-          }
-        } else {
-          if (googleResponse.status === 'OK') {
-            setResponse(() => googleResponse)
-            setRoute(googleResponse.routes[0])
-          } else {
-            console.log('response: ', googleResponse)
-          }
-        }
-      }
-    }
-  
-    return (
-      <div>
-          <>
-            {destination !== '' && origin !== '' && (
-                
-              <DirectionsService 
-                options={{
-                  origin,
-                  mDestination,
-                  waypoints: waypts,
-                  optimizeWaypoints: true,
-                  travelMode: 'DRIVING'
-                }}
-                callback={directionsCallback}
-              />
-            )}
-  
-            {response !== null && (
-              <DirectionsRenderer 
-                options={{
-                  directions: response
-                }}
-              />
-            )}
-          </>
-      </div>
-    );
-  }
-
-// function Directions({routesList}){
-//     const map = useMap();
-//     const routesLibrary = useMapsLibrary("routes");
-//     const [directionsService, setDirectionsService] = useState();
-//     const [directionsRenderer, setDirectionsRenderer] = useState();
-//     const [routes, setRoutes] = useState([]);
-//     const [routeIndex, setRouteIndex] = useState(0);
-//     const selected = routes[routeIndex];
-//     const leg = selected?.legs[0]; // if we got more than 1 legs for the journey, which we DO, we can change leg to display the leg we're at!
-
-//     useEffect(()=>{
-//         if (!routesLibrary || !map) return;
-//         setDirectionsService(new routesLibrary.DirectionsService());
-//         setDirectionsRenderer(new routesLibrary.DirectionsRenderer({map}));
-//     }, [routesLibrary, map]);
-
-//     useEffect(()=>{
-//         if (!directionsService || !directionsRenderer) return;
-//         directionsService.route({
-//             origin: "",
-//             destination: "",
-//             waypoints: routesList.map(item=>{
-//                 return {
-//                     location: {
-//                         lat: item[0], 
-//                         lng: item[1]
-//                     },
-//                     stopover: true
-//                 }
-//             }),
-//             travelMode: google.maps.TravelMode.DRIVING,
-//             provideRouteAlternatives: true
-//         }).then(response => {
-//             directionsRenderer.setDirections(response);
-//             setRoutes(response.routes);
-//         });
-//     },[directionsService,directionsRenderer]);
-
-//     useEffect(() => {
-//         if (!directionsRenderer) return;
-//         directionsRenderer.setRouteIndex(routeIndex);
-//     }, [routeIndex, directionsRenderer]);
-
-//     if (!leg) return null;
-
-//     return <div className = "directions">
-//         {/*Route name (generated):*/}
-//         <h2>{selected.summary}</h2>
-//         {/*route info (generated):*/}
-//         <p>
-//             {/*<START LOCATION> to <END LOCATION>*/}
-//             {leg.start_address.split(",")[1]} to {leg.end_address.split(",")[1]}
-//         </p>
-//         <p>Distance: {leg.distance?.text}</p>
-//         <p>Duration: {leg.duration?.text}</p>
-
-//     {/*    Displaying alternate routes here*/}
-//         <h3>Other routes</h3>
-//         <ul>
-//             {routes.map((route, index) => <li key={route.summary}>
-//                 <button onClick={()=>setRouteIndex(index)}>
-//                     {route.summary}
-//                 </button>
-//             </li>)}
-//         </ul>
-//     </div>
-// }
 export default memo(MyMap)
