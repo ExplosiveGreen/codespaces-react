@@ -20,7 +20,7 @@ import { AccountCircle, LocalGroceryStore } from "@mui/icons-material";
 import { Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/actions/user";
-
+import { socket } from "../../../socket";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -160,6 +160,7 @@ export default function PersistentDrawerLeft({
               </MenuItem>
               <MenuItem
                 onClick={() => {
+                  socket.disconnect();
                   dispatch(setUser(null));
                   navigate("/");
                 }}

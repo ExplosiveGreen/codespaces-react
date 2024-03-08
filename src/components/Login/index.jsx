@@ -30,7 +30,7 @@ function Login() {
       validUser.email,
       validUser.password
     );
-    if (user1 && Object.entries(user1).length > 0) {
+    if (Object.entries(user1).length > 0) {
       setUsers(user1);
       socket.connect();
       dispatch(setUser(user1[0]));

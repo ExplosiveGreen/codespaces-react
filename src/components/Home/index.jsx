@@ -34,7 +34,6 @@ function Home() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   let { generate } = useParams();
   const dispatch = useDispatch();
-  console.log(user);
   useEffect(() => {
     function onConnect() {
       setIsConnected(true);

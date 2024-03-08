@@ -46,23 +46,21 @@ function DonatorDeliveries() {
   }, []);
   const deleteDelivery = async (id) => {
     const result = await DeliveryService.deleteDelivery(id);
-    if (result) {
-      socket.emit("deleteDelivery", result);
-      const updateDalivery = await UserService.updateUser({
+    socket.emit("deleteDelivery", result);
+    const updateDalivery = await UserService.updateUser({
+      ...user,
+      delivery_requests: (user.delivery_requests || []).filter(
+        (dr) => dr != id
+      ),
+    });
+    dispatch(
+      setUser({
         ...user,
         delivery_requests: (user.delivery_requests || []).filter(
           (dr) => dr != id
         ),
-      });
-      dispatch(
-        setUser({
-          ...user,
-          delivery_requests: (user.delivery_requests || []).filter(
-            (dr) => dr != id
-          ),
-        })
-      );
-    }
+      })
+    );
   };
   const saveDelivery = async (event) => {
     event.preventDefault();
