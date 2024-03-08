@@ -60,26 +60,23 @@ function CarrierHome() {
     await getDonators();
   };
   let { generate } = useParams();
-  let oldDelivery = null;
+
   socket.on("notification", async (delivery) => {
-    if (oldDelivery == delivery) return;
-    else {
-      oldDelivery = delivery;
-      const donator = await UserService.getUserById(delivery.donator);
-      const org = await UserService.getUserById(delivery.organization);
-      dispatch(
-        deleteRoute({
-          lat: donator[0].address.latitude,
-          lng: donator[0].address.longitude,
-        })
-      );
-      dispatch(
-        deleteRoute({
-          lat: org[0].location.latitude,
-          lng: org[0].location.longitude,
-        })
-      );
-    }
+    console.log("notification");
+    const donator = await UserService.getUserById(delivery.donator);
+    const org = await UserService.getUserById(delivery.organization);
+    dispatch(
+      deleteRoute({
+        lat: donator[0].address.latitude,
+        lng: donator[0].address.longitude,
+      })
+    );
+    dispatch(
+      deleteRoute({
+        lat: org[0].location.latitude,
+        lng: org[0].location.longitude,
+      })
+    );
   });
   console.log("generate", generate);
   const getDonators = async () => {
