@@ -80,7 +80,7 @@ function DonatorHome() {
       items: cmd.items.map(i => i || 0)
     }
     const flag = !cmd.items.reduce((sum, val) => sum + val, 0)
-    if(flag) {
+    if (flag) {
       (await DonationService.updateDonationRequest({
         ...donation,
         status: 'Accepted',
@@ -88,11 +88,11 @@ function DonatorHome() {
       const orgUser = {
         ...org,
         donation_requests: org.donation_requests.map(dr => dr._id).filter(dr => dr != donation._id),
-        donations:[...org.donations, donation._id]
+        donations: [...org.donations, donation._id]
       }
       const donatorUser = {
         ...user,
-        donations:[...user.donations, donation._id]
+        donations: [...user.donations, donation._id]
       }
       await UserService.updateUser(orgUser);
       await UserService.updateUser(donatorUser);
@@ -113,7 +113,7 @@ function DonatorHome() {
       })
       await DonationService.updateDonationRequest({
         ...donation,
-        items: donation.items.map(({name,amount},ind) => { return {name, amount: amount - cmd.items[ind]}})
+        items: donation.items.map(({ name, amount }, ind) => { return { name, amount: amount - cmd.items[ind] } })
       })
       if (donationResult) {
         const donatorUser = {
@@ -122,7 +122,7 @@ function DonatorHome() {
         }
         const orgUser = {
           ...org,
-          donation:[...org.donation, donationResult._id]
+          donation: [...org.donation, donationResult._id]
         }
         await UserService.updateUser(orgUser);
         await UserService.updateUser(donatorUser);
@@ -144,7 +144,7 @@ function DonatorHome() {
     let ca = []
     organizations.map((org) => {
       org.donation_requests.map(({ _id, items }) => {
-        ca = [...ca, { _id, items: (items || []).map(() => { return 0 }) }]
+        ca = [...ca, { _id, items: (items || []).map((item) => { return item.amount }) }]
       })
     })
     return ca;
@@ -160,34 +160,40 @@ function DonatorHome() {
           element: (
             <>
               <List>
-                {(org.donation_requests || []).map((dont) => (
+                {(org.donation_requests || []).map((dont) => { 
+                  const cmd = customeAmount.find(ca => ca._id == dont._id);
+                  return (
                   <ListItem>
                     <List>
-                      {dont.items.map(({ name, amount }, index) => (
-                        <ListItem>
-                          <ListItemText primary={`${name} : ${amount}`} />
-                          <TextField
-                            autoFocus
-                            margin="dense"
-                            name="amount"
-                            label="amount"
-                            type="number"
-                            value={(Array.isArray(customeAmount) && customeAmount.length != 0) ? customeAmount.find(ca => ca._id == dont._id).items[index] : 0}
-                            onChange={({ target }) => {
-                              const ca = [
-                                ...(customeAmount.filter(ca => ca._id != dont._id) || []),
-                                { _id: dont._id, items: customeAmount.find(ca => ca._id == dont._id).items.map((value, ind) => ind == index ? parseInt(target.value) : value) }
-                              ]
-                              setCustomeAmount(ca)
-                            }
-                            }
-                          />
-                        </ListItem>
-                      ))}
+                      {dont.items.map(({ name, amount }, index) => {
+                        const error = !(((customeAmount.find(ca => ca._id == dont._id) || []).items || [])[index]);
+                      return (
+                      <ListItem>
+                        <ListItemText primary={`${name} : ${amount}`} />
+                        <TextField
+                          autoFocus
+                          id={error ? "outlined-basic" : "outlined-error"}
+                          error={error && "must be a number biger then 0"}
+                          margin="dense"
+                          name="amount"
+                          label="amount"
+                          type="number"
+                          value={(Array.isArray(customeAmount) && customeAmount.length != 0) ? customeAmount.find(ca => ca._id == dont._id).items[index] : 0}
+                          onChange={({ target }) => {
+                            const ca = [
+                              ...(customeAmount.filter(ca => ca._id != dont._id) || []),
+                              { _id: dont._id, items: customeAmount.find(ca => ca._id == dont._id).items.map((value, ind) => ind == index ? parseInt(target.value) : value) }
+                            ]
+                            setCustomeAmount(ca)
+                          }
+                          }
+                        />
+                      </ListItem>
+                      )})}
                     </List>
-                    <Button onClick={async () => await saveDonation(dont, org)}>Accept</Button>
+                    <Button disabled={cmd && !cmd.items.reduce((agg, val) => agg && val, true)} onClick={async () => await saveDonation(dont, org)}>Accept</Button>
                   </ListItem>
-                ))}
+                )})}
               </List>
             </>
           ),
