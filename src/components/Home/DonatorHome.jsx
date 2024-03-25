@@ -79,7 +79,8 @@ function DonatorHome() {
       ...cmd,
       items: cmd.items.map(i => i || 0)
     }
-    const flag = cmd.items.reduce((agg, val,index) => agg && val == donation.items[index], true)
+    const flag = cmd.items.reduce((agg, val,index) => agg && val == donation.items[index].amount, true)
+    console.log(cmd,flag,donation,org,user)
     if (flag) {
       (await DonationService.updateDonationRequest({
         ...donation,
@@ -103,7 +104,6 @@ function DonatorHome() {
       })
       dispatch(setUser(donatorUser));
     } else {
-      console.log(org)
       const donationResult = await DonationService.putDonationRequest({
         status: 'Accepted',
         items: cmd.items.map((i, index) => { return { name: donation.items[index].name, amount: i } })
