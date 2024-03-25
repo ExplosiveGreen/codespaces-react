@@ -16,7 +16,10 @@ function DonatorDonations() {
   const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
   useEffect(() => {
-    setTableData(user.donations);
+    const fetchData = async () => {
+      setTableData(await DonationService.getDonatorDonations(user));
+    };
+    fetchData();
   }, [user]);
   const columns = [
     { id: 'id', label: 'ID', accessor: (row) => row._id },
