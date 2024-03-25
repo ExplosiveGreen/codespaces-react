@@ -23,7 +23,7 @@ function DonatorDonations() {
     {
       id: 'items', label: 'items', accessor: (row) =>
         <List>
-          {row.items.map(({ name, amount }) => (
+          {(row.items || []).map(({ name, amount }) => (
             <ListItem>
               <ListItemText primary={`${name} : ${amount}`} />
             </ListItem>
