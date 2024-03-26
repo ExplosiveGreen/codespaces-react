@@ -50,6 +50,7 @@ function Login() {
   return (
     <div id="wrapper">
       <Container className="flex-form">
+        <h1>Login</h1>
         <TextField
           id={error ? "outlined-basic" : "outlined-error"}
           error={error}
@@ -73,7 +74,7 @@ function Login() {
         <Button type="submit" onClick={login} variant="contained">
           submit
         </Button>
-
+        <span>Not a member? Sign Up</span>
         {/* <button
             aria-label="sign user"
             onClick={() => dispatch(setUser({auth:['org','donator','carrier']}))}
