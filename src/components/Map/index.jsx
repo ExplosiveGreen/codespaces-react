@@ -56,8 +56,21 @@ function MyMap({locations, isDisplayRoute}) {
             console.error('Geolocation is not supported by this browser.');
           }
 
-        // const bounds = new window.google.maps.LatLngBounds(center);
-        // map.fitBounds(bounds);
+        //THIS FUNCTIONS SETS ALL LOCATIONS LOADED INTO THE ROUTE. DO NOT USE UNTIL YOU GET ONLY SPECIFIC ONES!!!!
+        waypts.pop();
+        
+        locations.map((item, index)=>{
+            const lat = item.location.lat, lng=item.location.lng;
+            waypts.push({
+                location:{lat,lng},
+                stopOver: true
+            })
+            // setDestination({lat,lng})
+        })
+        
+        
+        // this is mock data:
+          
         setMap(map)
         waypts.push({
             location:{lat:32.151119, lng: 34.845105},
@@ -99,7 +112,12 @@ function MyMap({locations, isDisplayRoute}) {
         }
       }
 
-
+const pushWaypoint = (lat,lng) =>{
+    waypts.push({
+      location:{lat:lat, lng: lng},
+      stopover: true,
+    })
+}
     return isLoaded ? (
         <GoogleMap
         mapContainerStyle={containerStyle}
@@ -115,6 +133,8 @@ function MyMap({locations, isDisplayRoute}) {
         {/* This is called TOO MANY TIMES!!! */}
         {locations && isLoaded && locations.map((item, index)=>{
             const lat = item.location.lat , lng=item.location.lng;
+        (isDisplayRoute && pushWaypoint(lat, lng))
+
             return <>
             {item.location &&<>
                 <Marker key={index} position={{ lat,lng }} onClick={() => handleActiveMarker(index)} onCloseClick={() => handleActiveMarker(none)}>
