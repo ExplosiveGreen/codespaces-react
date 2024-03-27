@@ -1,29 +1,22 @@
 import React from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
-
+import { DataGrid } from '@mui/x-data-grid';
 const MyTable = ({ columns, tableData }) => {
-  return (
-    <Table stickyHeader>
-      <TableHead>
-        <TableRow>
-          {columns.map((column) => (
-            <TableCell key={`colomn-${column.id}`} align={column.align}>
-              {column.label}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tableData.map((row) => (
-          <TableRow key={row._id}>
-            {columns.map((column,index) => (
-              <TableCell key={`data-${column.id}-${index}`}>{column.accessor(row)}</TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
+  console.log(columns)
+  return (<>
+    {Array.isArray(columns) && Array.isArray(tableData) && (
+        <DataGrid
+          rows={tableData.map((item, index) => { return { ...item, id: item._id || `${index}` } })}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      )
+    }
+  </>);
 };
 
 export default MyTable;

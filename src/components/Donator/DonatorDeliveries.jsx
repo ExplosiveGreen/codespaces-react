@@ -82,24 +82,16 @@ function DonatorDeliveries() {
     }
   };
   const columns = [
-    { id: "id", label: "ID", accessor: (row) => row._id },
-    { id: "donator", label: "Donator", accessor: (row) => row.donator.name },
+    { field: "_id", headerName: "ID", flex:1 },
+    { field: "donator", headerName: "Donator",flex:1, valueGetter: (val,row) => val.name },
+    { field: "organization", headerName: "Organization",flex:1, valueGetter: (val,row) => val.name },
+    { field: "delivery_date", headerName: "Delivery Date",flex:1 },
+    { field: "status", headerName: "Status",flex:1 },
     {
-      id: "organization",
-      label: "Organization",
-      accessor: (row) => row.organization.name,
-    },
-    {
-      id: "delivery_date",
-      label: "Delivery Date",
-      accessor: (row) => row.delivery_date,
-    },
-    { id: "status", label: "Status", accessor: (row) => row.status },
-    {
-      id: "actions",
-      label: "Actions",
-      accessor: (row) => {
-        return (
+      field:"buttons",
+      headerName: "Actions",
+      flex:1,
+      renderCell: ({row}) => (
           <>
             <Button
               onClick={() => {
@@ -118,8 +110,7 @@ function DonatorDeliveries() {
               delete
             </Button>
           </>
-        );
-      },
+        )
     },
   ];
   return (

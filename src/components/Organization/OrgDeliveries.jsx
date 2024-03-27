@@ -57,23 +57,25 @@ function OrgDeliveries() {
     }
   };
   const columns = [
-    { id: "id", label: "ID", accessor: (row) => row._id },
+    { field: "_id", headerName: "ID", flex:1 },
     {
-      id: "delivery_date",
-      label: "Delivery Date",
-      accessor: (row) => row.delivery_date,
+      field: "delivery_date",
+      headerName: "Delivery Date",
+      flex:1
     },
-    { id: "donator", label: "Donator", accessor: (row) => row.donator?.name },
+    { field: "donator", headerName: "Donator",flex:1, valueGetter: (val,row) => val?.name },
     {
-      id: "organization",
-      label: "Organization",
-      accessor: (row) => row.organization?.name,
+      field: "organization",
+      headerName: "Organization",
+      flex:1,
+      valueGetter: (val,row) => val?.name
     },
-    { id: "status", label: "Status", accessor: (row) => row.status },
+    { field: "status", headerName: "Status",flex:1 },
     {
-      id: "actions",
-      label: "Actions",
-      accessor: (row) => {
+      field: "actions",
+      headerName: "Actions",
+      flex:1,
+      renderCell: ({row}) => {
         if (row.status == "Awaiting")
           return (
             <Button onClick={async () => await ApproveDelivery(row)}>

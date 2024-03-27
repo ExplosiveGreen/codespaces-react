@@ -13,8 +13,8 @@ function OrgDonations() {
         setTableData(user.donations);
       }, []);
     const columns = [
-        { id: 'id', label: 'ID', accessor: (row) => row._id },
-        { id: 'items', label: 'items', accessor: (row) =>
+        { field: "_id", headerName: "ID", flex:1 },
+        { field: 'items', headerName: 'items',flex:1, renderCell: ({row}) =>
          <List> 
             {row.items.map(({name,amount},index) =>(
                 <ListItem key={`${row._id}-item-${index}`}>
@@ -23,7 +23,7 @@ function OrgDonations() {
             ))}
          </List> 
         },
-        { id: 'status', label: 'Status', accessor: (row) => row.status },
+        { field: 'status', headerName: 'Status',flex:1 },
     ];
     return (
         <PersistentDrawerLeft 

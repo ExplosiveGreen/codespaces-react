@@ -25,13 +25,14 @@ function OrgHome() {
   const dispatch = useDispatch();
 
   const columns = [
-    { id: "id", label: "ID", accessor: (row) => row._id },
+    { field: "_id", headerName: "ID", flex:1 },
     {
-      id: "items",
-      label: "items",
-      accessor: (row) => (
+      field: "items",
+      flex:1,
+      headerName: "items",
+      renderCell: ({row}) => (
         <List>
-          {row.items.map(({ name, amount },index) => (
+          {row.items?.map(({ name, amount },index) => (
             <ListItem key={`${row._id}-item-${index}`}>
               <ListItemText primary={`${name} : ${amount}`} />
             </ListItem>
@@ -39,11 +40,12 @@ function OrgHome() {
         </List>
       ),
     },
-    { id: "status", label: "Status", accessor: (row) => row.status },
+    { field: "status", headerName: "Status", flex:1 },
     {
-      id: "actions",
-      lable: "Actations",
-      accessor: (row) => (
+      field: "actions",
+      flex:1,
+      headerName: "Actations",
+      renderCell: ({row}) => (
         <>
           <Button
             onClick={() => {

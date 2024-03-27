@@ -22,9 +22,9 @@ function DonatorDonations() {
     fetchData();
   }, [user]);
   const columns = [
-    { id: 'id', label: 'ID', accessor: (row) => row._id },
+    { field: "_id", headerName: "ID", flex:1 },
     {
-      id: 'items', label: 'items', accessor: (row) =>
+      field: 'items', headerName: 'items',flex:1, renderCell: ({row}) =>
         <List>
           {(row.items || []).map(({ name, amount },index) => (
             <ListItem key={`${row._id}-item-${index}`}>
@@ -33,9 +33,9 @@ function DonatorDonations() {
           ))}
         </List>
     },
-    { id: 'status', label: 'Status', accessor: (row) => row.status },
+    { field: 'status',flex:1, headerName: 'Status' },
     {
-      id: 'actions', label: 'Actions', accessor: (row) => {
+      field: 'actions',flex:1, headerName: 'Actions', renderCell: ({row}) => {
         return <>
           <Button
             onClick={() => {
