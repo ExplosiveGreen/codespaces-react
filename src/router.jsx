@@ -8,6 +8,7 @@ import { DeliveryDining, VolunteerActivism } from "@mui/icons-material";
 import DonatorDonations from "./components/Donator/DonatorDonations";
 import OrgDeliveries from "./components/Organization/OrgDeliveries";
 import OrgDonations from "./components/Organization/OrgDonations";
+import Profile from "./components/Profile";
 export default [
   {
     path: "/",
@@ -15,6 +16,11 @@ export default [
     auth: ["org", "carrier", "donator"],
     name: "Home",
     icon: <HomeIcon />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+    auth: ["org", "carrier", "donator"]
   },
   {
     path: "/generate/:generate",

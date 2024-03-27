@@ -8,4 +8,12 @@ export default class LocationService {
             console.log(e)
         }
     }
+    static async getAddress (location) {
+        try {
+        const address = await axios.get(`https://nominatim.openstreetmap.org/reverse?addressdetails=1&format=jsonv2&lat=${location.latitude}&lon=${location.longitude}`);
+        return address.data;
+        }catch(e) {
+            console.log(e)
+        }
+    }
 }
