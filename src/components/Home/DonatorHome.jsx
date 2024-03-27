@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import {
   Button,
   Checkbox,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -150,6 +151,7 @@ function DonatorHome() {
   const getLocations = (orgList = organizations) => {
     return (Array.isArray(orgList) ? orgList : [])
       .map((org) => {
+        console.log(org)
         return {
           key: org._id,
           location: {
@@ -157,7 +159,8 @@ function DonatorHome() {
             lng: org.location.longitude,
           },
           element: (
-            <>
+            <Container className="flex-form">
+              <h1 dir='rtl'>{org.name}</h1>
               <List>
                 {(org.donation_requests || []).map((dont) => { 
                   const cmd = customeAmount.find(ca => ca._id == dont._id);
@@ -194,7 +197,7 @@ function DonatorHome() {
                   </ListItem>
                 )})}
               </List>
-            </>
+            </Container>
           ),
         };
       });
