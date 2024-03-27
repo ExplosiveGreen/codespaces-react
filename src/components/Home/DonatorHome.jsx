@@ -242,7 +242,7 @@ function DonatorHome() {
   return (
     <div style={{ position: 'relative' }}>
       <Map locations={locations} isDisplayRoute={Boolean(generate)} />
-      <div style={{ position: 'absolute', right: '20%', bottom: '10%' }}>
+      <div style={{ position: 'absolute', right: '10%', bottom: '11.5%' }}>
         <Button style={{ background: 'blue', color: 'white' }} onClick={handleFilterOpen}>Filter</Button>
         <Menu
           anchorEl={anchorEl}
