@@ -4,6 +4,7 @@ import { setUser } from "../../../redux/actions/user";
 import { useDispatch } from "react-redux";
 import { Button, Container, TextField } from "@mui/material";
 import { socket } from "../../../socket";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [users, setUsers] = useState([]);
@@ -74,7 +75,7 @@ function Login() {
         <Button type="submit" onClick={login} variant="contained">
           submit
         </Button>
-        <span>Not a member? Sign Up</span>
+        <Link to='Signup' style={{'textDecoration':'none', 'color':'black' }}>Not a member? Sign Up</Link>
         {/* <button
             aria-label="sign user"
             onClick={() => dispatch(setUser({auth:['org','donator','carrier']}))}
