@@ -1,8 +1,8 @@
 import axios from 'axios'
 export default class LocationService {
-    static async getLocation () {
+    static async getLocation (address) {
         try {
-        const location = await axios.get('http://ip-api.com/json/');
+        const location = await axios.get(`https://nominatim.openstreetmap.org/search?addressdetails=1&format=jsonv2&q=${address.split(" ").join("+")}`);
         return location.data;
         }catch(e) {
             console.log(e)
