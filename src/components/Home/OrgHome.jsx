@@ -31,8 +31,8 @@ function OrgHome() {
       label: "items",
       accessor: (row) => (
         <List>
-          {row.items.map(({ name, amount }) => (
-            <ListItem>
+          {row.items.map(({ name, amount },index) => (
+            <ListItem key={`${row._id}-item-${index}`}>
               <ListItemText primary={`${name} : ${amount}`} />
             </ListItem>
           ))}
@@ -165,7 +165,7 @@ function OrgHome() {
           </Button>
           <List>
             {items.map(({ name, amount }, index) => (
-              <ListItem>
+              <ListItem key={`item-${index}`}>
                 {/* <ListItemText primary={`${name} : ${amount}`} /> */}
                 <TextField
                   autoFocus

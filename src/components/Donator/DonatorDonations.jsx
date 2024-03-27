@@ -26,8 +26,8 @@ function DonatorDonations() {
     {
       id: 'items', label: 'items', accessor: (row) =>
         <List>
-          {(row.items || []).map(({ name, amount }) => (
-            <ListItem>
+          {(row.items || []).map(({ name, amount },index) => (
+            <ListItem key={`${row._id}-item-${index}`}>
               <ListItemText primary={`${name} : ${amount}`} />
             </ListItem>
           ))}
@@ -103,7 +103,7 @@ function DonatorDonations() {
           <DialogContent>
             <List>
               {items.map(({ name, amount }, index) => (
-                <ListItem>
+                <ListItem key={`item-${index}`}>
                   <TextField
                     autoFocus
                     required

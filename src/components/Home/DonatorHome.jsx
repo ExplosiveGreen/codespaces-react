@@ -151,6 +151,7 @@ function DonatorHome() {
     return (Array.isArray(orgList) ? orgList : [])
       .map((org) => {
         return {
+          key: org._id,
           location: {
             lat: org.location.latitude,
             lng: org.location.longitude,
@@ -161,12 +162,12 @@ function DonatorHome() {
                 {(org.donation_requests || []).map((dont) => { 
                   const cmd = customeAmount.find(ca => ca._id == dont._id);
                   return (
-                  <ListItem>
+                  <ListItem key={dont._id}>
                     <List>
                       {dont.items.map(({ name, amount }, index) => {
                         const error = !(((customeAmount.find(ca => ca._id == dont._id) || []).items || [])[index]);
                       return (
-                      <ListItem>
+                      <ListItem key={`${dont._id}-item-${index}`}>
                         <ListItemText primary={`${name} : ${amount}`} />
                         <TextField
                           autoFocus

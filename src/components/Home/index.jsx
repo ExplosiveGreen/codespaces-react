@@ -60,8 +60,8 @@ function Home() {
       label: "items",
       accessor: (row) => (
         <List>
-          {row.items.map(({ name, amount }) => (
-            <ListItem>
+          {row.items.map(({ name, amount },index) => (
+            <ListItem key={`${row._id}-item-${index}`}>
               <ListItemText primary={`${name} : ${amount}`} />
             </ListItem>
           ))}
@@ -111,10 +111,10 @@ function Home() {
                 <>
                   <List>
                     {org.donation_requests.map((dont) => (
-                      <ListItem>
+                      <ListItem key={dont._id}>
                         <List>
-                          {dont.items.map(({ name, amount }) => (
-                            <ListItem>
+                          {dont.items.map(({ name, amount },index) => (
+                            <ListItem key={`${dont_id}-item-${index}`}>
                               <ListItemText primary={`${name} : ${amount}`} />
                             </ListItem>
                           ))}

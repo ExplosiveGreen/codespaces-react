@@ -81,7 +81,6 @@ function CarrierHome() {
       forceUpdate();
     }
   });
-  console.log("generate", generate);
   const getDonators = async () => {
     const Donatorresult = await UserService.getAllDonators();
     const donatorList = (
@@ -110,6 +109,7 @@ function CarrierHome() {
     if (!Boolean(generate))
       return (Array.isArray(donators) ? donators : []).map((donator) => {
         return {
+          key: donator._id,
           location: {
             lat: donator.address.latitude,
             lng: donator.address.longitude,
@@ -137,7 +137,10 @@ function CarrierHome() {
       });
     else
       return routes.map((route) => {
-        return { location: route };
+        return { 
+          key: JSON.stringify(route),
+          location: route 
+        };
       });
   };
   useEffect(() => {

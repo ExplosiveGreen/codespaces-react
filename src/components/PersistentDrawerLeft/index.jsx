@@ -235,8 +235,8 @@ export default function PersistentDrawerLeft({
         <Divider />
         <List>
           {drawList.map(({ name, icon, path }) => (
-            <Link style={{ textDecoration: "none", color: "black" }} to={path}>
-              <ListItem key={name} disablePadding>
+            <Link key={name} style={{ textDecoration: "none", color: "black" }} to={path}>
+              <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText primary={name} />

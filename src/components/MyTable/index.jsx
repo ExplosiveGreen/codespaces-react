@@ -7,7 +7,7 @@ const MyTable = ({ columns, tableData }) => {
       <TableHead>
         <TableRow>
           {columns.map((column) => (
-            <TableCell key={column.id} align={column.align}>
+            <TableCell key={`colomn-${column.id}`} align={column.align}>
               {column.label}
             </TableCell>
           ))}
@@ -15,9 +15,9 @@ const MyTable = ({ columns, tableData }) => {
       </TableHead>
       <TableBody>
         {tableData.map((row) => (
-          <TableRow key={row[0]}>
-            {columns.map((column) => (
-              <TableCell key={column.id}>{column.accessor(row)}</TableCell>
+          <TableRow key={row._id}>
+            {columns.map((column,index) => (
+              <TableCell key={`data-${column.id}-${index}`}>{column.accessor(row)}</TableCell>
             ))}
           </TableRow>
         ))}

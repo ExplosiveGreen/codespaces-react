@@ -16,8 +16,8 @@ function OrgDonations() {
         { id: 'id', label: 'ID', accessor: (row) => row._id },
         { id: 'items', label: 'items', accessor: (row) =>
          <List> 
-            {row.items.map(({name,amount}) =>(
-                <ListItem>
+            {row.items.map(({name,amount},index) =>(
+                <ListItem key={`${row._id}-item-${index}`}>
                     <ListItemText primary={`${name} : ${amount}`} />
                 </ListItem>
             ))}
