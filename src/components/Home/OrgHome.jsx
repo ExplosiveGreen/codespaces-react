@@ -107,6 +107,7 @@ function OrgHome() {
       }
     }
     dispatch(setUser(newUser));
+    setItems([]);
     setDonationForm(false);
   };
   return (<>

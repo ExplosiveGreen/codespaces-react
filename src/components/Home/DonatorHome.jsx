@@ -108,10 +108,6 @@ function DonatorHome() {
         status: 'Accepted',
         items: cmd.items.map((i, index) => { return { name: donation.items[index].name, amount: i } })
       })
-      setAcceptDonation({
-        status: 'Accepted',
-        items: cmd.items.map((i, index) => { return { name: donation.items[index].name, amount: i } })
-      })
       await DonationService.updateDonationRequest({
         ...donation,
         items: donation.items.map(({ name, amount }, ind) => { return { name, amount: amount - cmd.items[ind] } })
@@ -128,6 +124,7 @@ function DonatorHome() {
         await UserService.updateUser(orgUser);
         await UserService.updateUser(donatorUser);
         setAcceptOrg(orgUser)
+        setAcceptDonation(donationResult)
         dispatch(setUser(donatorUser));
       }
     }
