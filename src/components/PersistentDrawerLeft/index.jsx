@@ -113,7 +113,7 @@ export default function PersistentDrawerLeft({
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -127,7 +127,7 @@ export default function PersistentDrawerLeft({
               {headerText}
             </Typography>
           </div>
-          <Link style={{display:'flex'}} to='/'><img style={{aspectRatio: 2/1}} src="giveHubLogo.ico" alt='giveHubLogo'/></Link>
+          <Link style={{ display: 'flex' }} to='/'><img style={{ aspectRatio: 2 / 1 }} src="giveHubLogo.ico" alt='giveHubLogo' /></Link>
           <div>
             <IconButton
               size="large"
@@ -250,10 +250,13 @@ export default function PersistentDrawerLeft({
           ))}
         </List>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {children}
-      </Main>
+      <div style={{width:'100%'}}>
+        <Main open={open}>
+          <DrawerHeader />
+          {children}
+        </Main>
+        <footer style={{ display:'flex', justifyContent:'flex-end'}}><span>&copy;2024 GiveHub</span></footer>
+      </div>
     </Box>
   );
 }
