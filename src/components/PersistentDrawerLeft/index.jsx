@@ -16,7 +16,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { AccountCircle, LocalGroceryStore } from "@mui/icons-material";
+import { AccountCircle, DeliveryDining, LocalGroceryStore } from "@mui/icons-material";
 import { Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/actions/user";
@@ -128,7 +128,7 @@ export default function PersistentDrawerLeft({
             </Typography>
           </div>
           <Link style={{ display: 'flex' }} to='/'><img style={{ aspectRatio: 2 / 1 }} src="giveHubLogo.ico" alt='giveHubLogo' /></Link>
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -171,51 +171,51 @@ export default function PersistentDrawerLeft({
                 Logout
               </MenuItem>
             </Menu>
+            {user.__t == "carrier" && (
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleStoreMenu}
+                  color="inherit"
+                >
+                  <DeliveryDining />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={StoreAnchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(StoreAnchorEl)}
+                  onClose={handleStoreClose}
+                >
+                  {Array.isArray(routes) &&
+                    routes.map((route) => (
+                      <MenuItem>
+                        ({route.lat},{route.lng})
+                      </MenuItem>
+                    ))}
+                  <MenuItem>
+                    <Link
+                      style={{ textDecoration: "none", color: "black" }}
+                      to="/generate/true"
+                    >
+                      generate
+                    </Link>
+                  </MenuItem>
+                </Menu>
+              </div>
+            )}
           </div>
-          {user.__t == "carrier" && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleStoreMenu}
-                color="inherit"
-              >
-                <LocalGroceryStore />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={StoreAnchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(StoreAnchorEl)}
-                onClose={handleStoreClose}
-              >
-                {Array.isArray(routes) &&
-                  routes.map((route) => (
-                    <MenuItem>
-                      ({route.lat},{route.lng})
-                    </MenuItem>
-                  ))}
-                <MenuItem>
-                  <Link
-                    style={{ textDecoration: "none", color: "black" }}
-                    to="/generate/true"
-                  >
-                    generate
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </div>
-          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -250,12 +250,12 @@ export default function PersistentDrawerLeft({
           ))}
         </List>
       </Drawer>
-      <div style={{width:'100%'}}>
+      <div style={{ width: '100%' }}>
         <Main open={open}>
           <DrawerHeader />
           {children}
         </Main>
-        <footer style={{ display:'flex', justifyContent:'flex-end'}}><span>&copy;2024 GiveHub</span></footer>
+        <footer style={{ display: 'flex', justifyContent: 'flex-end' }}><span>&copy;2024 GiveHub</span></footer>
       </div>
     </Box>
   );
