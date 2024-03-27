@@ -114,7 +114,7 @@ function Home() {
                       <ListItem key={dont._id}>
                         <List>
                           {dont.items.map(({ name, amount },index) => (
-                            <ListItem key={`${dont_id}-item-${index}`}>
+                            <ListItem key={`${dont._id}-item-${index}`}>
                               <ListItemText primary={`${name} : ${amount}`} />
                             </ListItem>
                           ))}

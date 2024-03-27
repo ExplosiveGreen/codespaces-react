@@ -115,28 +115,29 @@ function CarrierHome() {
             lng: donator.address.longitude,
           },
           element: (
-            <>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
               {(donator.delivery_requests || [])
                 .filter((item) => item)
                 .map(
                   (dr) =>
                     dr.status == "Pending" && (
-                      <>
+                      <div>
                         {dayjs
                           .tz(dr.delivery_date, "America/New_York")
                           .format("YYYY-MM-DD HH:MM")}
                         <Button onClick={async () => await updateDalivery(dr)}>
                           Accept
                         </Button>
-                      </>
+                      </div>
                     )
                 )}
-            </>
+            </div>
           ),
         };
       });
     else
-      return routes.map((route) => {
+      return routes.filter((value,index)=> !routes.find((val,ind) => ind >index && JSON.stringify(val) == JSON.stringify(value)))
+      .map((route) => {
         return { 
           key: JSON.stringify(route),
           location: route 

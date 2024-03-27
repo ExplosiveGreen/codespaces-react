@@ -199,7 +199,8 @@ export default function PersistentDrawerLeft({
                   onClose={handleStoreClose}
                 >
                   {Array.isArray(routes) &&
-                    routes.map((route) => (
+                    routes.filter((value,index)=> !routes.find((val,ind) => ind >index && JSON.stringify(val) == JSON.stringify(value)))
+                    .map((route) => (
                       <MenuItem>
                         ({route.lat},{route.lng})
                       </MenuItem>
