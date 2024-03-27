@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PersistentDrawerLeft from "../PersistentDrawerLeft";
 import Map from "../Map";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MyTable from "../MyTable";
 import {
   Button,

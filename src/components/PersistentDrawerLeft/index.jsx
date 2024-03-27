@@ -72,6 +72,7 @@ export default function PersistentDrawerLeft({
   children,
   headerText,
   drawList,
+  logo,
 }) {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -111,19 +112,22 @@ export default function PersistentDrawerLeft({
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {headerText}
-          </Typography>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div">
+              {headerText}
+            </Typography>
+          </div>
+          <Link style={{display:'flex'}} to='/'><img style={{aspectRatio: 2/1}} src="giveHubLogo.ico" alt='giveHubLogo'/></Link>
           <div>
             <IconButton
               size="large"
