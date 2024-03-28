@@ -68,17 +68,16 @@ function CarrierHome() {
     if (donator && org) {
       dispatch(
         deleteRoute({
-          lat: donator.address.latitude,
-          lng: donator.address.longitude,
+          lat: donator[0].address.latitude,
+          lng: donator[0].address.longitude,
         })
       );
       dispatch(
         deleteRoute({
-          lat: org.location.latitude,
-          lng: org.location.longitude,
+          lat: org[0].location.latitude,
+          lng: org[0].location.longitude,
         })
       );
-      forceUpdate();
     }
   });
   const getDonators = async () => {
@@ -115,7 +114,13 @@ function CarrierHome() {
             lng: donator.address.longitude,
           },
           element: (
-            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               {(donator.delivery_requests || [])
                 .filter((item) => item)
                 .map(
@@ -136,13 +141,20 @@ function CarrierHome() {
         };
       });
     else
-      return routes.filter((value,index)=> !routes.find((val,ind) => ind >index && JSON.stringify(val) == JSON.stringify(value)))
-      .map((route) => {
-        return { 
-          key: JSON.stringify(route),
-          location: route 
-        };
-      });
+      return routes
+        .filter(
+          (value, index) =>
+            !routes.find(
+              (val, ind) =>
+                ind > index && JSON.stringify(val) == JSON.stringify(value)
+            )
+        )
+        .map((route) => {
+          return {
+            key: JSON.stringify(route),
+            location: route,
+          };
+        });
   };
   useEffect(() => {
     getDonators();

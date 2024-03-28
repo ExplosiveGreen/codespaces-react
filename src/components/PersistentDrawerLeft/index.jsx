@@ -16,7 +16,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { AccountCircle, DeliveryDining, LocalGroceryStore } from "@mui/icons-material";
+import {
+  AccountCircle,
+  DeliveryDining,
+  LocalGroceryStore,
+} from "@mui/icons-material";
 import { Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/actions/user";
@@ -112,8 +116,14 @@ export default function PersistentDrawerLeft({
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -127,8 +137,20 @@ export default function PersistentDrawerLeft({
               {headerText}
             </Typography>
           </div>
-          <Link style={{ display: 'flex' }} to='/'><img style={{ aspectRatio: 2 / 1 }} src="giveHubLogo.ico" alt='giveHubLogo' /></Link>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <Link style={{ display: "flex" }} to="/">
+            <img
+              style={{ aspectRatio: 2 / 1 }}
+              src="logo.png"
+              alt="giveHubLogo"
+            />
+          </Link>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -199,12 +221,20 @@ export default function PersistentDrawerLeft({
                   onClose={handleStoreClose}
                 >
                   {Array.isArray(routes) &&
-                    routes.filter((value,index)=> !routes.find((val,ind) => ind >index && JSON.stringify(val) == JSON.stringify(value)))
-                    .map((route) => (
-                      <MenuItem>
-                        ({route.lat},{route.lng})
-                      </MenuItem>
-                    ))}
+                    routes
+                      .filter(
+                        (value, index) =>
+                          !routes.find(
+                            (val, ind) =>
+                              ind > index &&
+                              JSON.stringify(val) == JSON.stringify(value)
+                          )
+                      )
+                      .map((route) => (
+                        <MenuItem>
+                          ({route.lat},{route.lng})
+                        </MenuItem>
+                      ))}
                   <MenuItem>
                     <Link
                       style={{ textDecoration: "none", color: "black" }}
@@ -240,7 +270,11 @@ export default function PersistentDrawerLeft({
         <Divider />
         <List>
           {drawList.map(({ name, icon, path }) => (
-            <Link key={name} style={{ textDecoration: "none", color: "black" }} to={path}>
+            <Link
+              key={name}
+              style={{ textDecoration: "none", color: "black" }}
+              to={path}
+            >
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>{icon}</ListItemIcon>
@@ -251,12 +285,14 @@ export default function PersistentDrawerLeft({
           ))}
         </List>
       </Drawer>
-      <div style={{ width: '100%' }}>
+      <div style={{ width: "100%" }}>
         <Main open={open}>
           <DrawerHeader />
           {children}
         </Main>
-        <footer style={{ display: 'flex', justifyContent: 'flex-end' }}><span>&copy;2024 GiveHub</span></footer>
+        <footer style={{ display: "flex", justifyContent: "flex-end" }}>
+          <span>&copy;2024 GiveHub</span>
+        </footer>
       </div>
     </Box>
   );
