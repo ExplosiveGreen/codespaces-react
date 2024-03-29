@@ -63,8 +63,6 @@ function CarrierHome() {
   socket.on("notification", async (delivery) => {
     const donator = await UserService.getUserById(delivery.donator);
     const org = await UserService.getUserById(delivery.organization);
-    console.log(donator, org);
-    console.log("notification", delivery);
     if (donator && org) {
       dispatch(
         deleteRoute({
