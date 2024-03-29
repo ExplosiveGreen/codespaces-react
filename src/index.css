@@ -15,7 +15,6 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
 }
 .flex-form {
   display: flex !important;

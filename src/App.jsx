@@ -1,17 +1,16 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import routes from './router';
-import { useSelector } from 'react-redux'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import routes from "./router";
+import { useSelector } from "react-redux";
 function App() {
-  const user = useSelector((state) => state.user.user)
+  const user = useSelector((state) => state.user.user);
   const router = createBrowserRouter(
-  routes.filter(item => 
-    (!user && item.auth.includes('noauth')) ||
-    (user && item.auth.includes(user.__t))
-  )
-);
+    routes.filter(
+      (item) =>
+        (!user && item.auth.includes("noauth")) ||
+        (user && item.auth.includes(user.__t))
+    )
+  );
+  console.log(routes);
   return (
     <createBrowserRouter>
       <RouterProvider router={router} />
