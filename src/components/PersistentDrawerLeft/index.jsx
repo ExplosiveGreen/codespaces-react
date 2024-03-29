@@ -179,7 +179,7 @@ export default function PersistentDrawerLeft({
               <MenuItem>
                 <Link
                   style={{ textDecoration: "none", color: "black" }}
-                  to="profile"
+                  to="../profile"
                 >
                   Profile
                 </Link>
