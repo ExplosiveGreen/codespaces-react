@@ -68,7 +68,7 @@ function MyMap({ locations, isDisplayRoute }) {
           location: { lat, lng },
           stopOver: true,
         });
-        setDestination({ lat: lat, lng: lng });
+        // setDestination({ lat: lat, lng: lng });
       });
 
       setMap(map);
@@ -80,7 +80,7 @@ function MyMap({ locations, isDisplayRoute }) {
       //     location:{lat:32.170437, lng:34.844282},
       //     stopover: true,
       // })
-      // setDestination({lat:32.083366,lng:34.800792})
+      setDestination({ lat: 32.083366, lng: 34.800792 });
     },
     [navigator.geolocation, locations]
   );
