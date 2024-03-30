@@ -14,11 +14,8 @@ const center = {
   };
 
 function MyMap({locations, isDisplayRoute}) {
-    // let callCounter = 0
-    // console.log('test 0 - how many times am I called? it`s ', callCounter++)
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch()
-    // dispatch(addRoute([longetute,latetud]))
     const routes = useSelector((state) => state.routes.routes)
     const [lat, setLatitude] = useState(32.086759);
     const [lng, setLongitude] = useState(34.789888);
@@ -55,34 +52,28 @@ function MyMap({locations, isDisplayRoute}) {
             console.error('Geolocation is not supported by this browser.');
           }
 
-        //THIS FUNCTIONS SETS ALL LOCATIONS LOADED INTO THE ROUTE. DO NOT USE UNTIL YOU GET ONLY SPECIFIC ONES!!!!
-    
-        // locations.map((item, index)=>{
-        //     const lat = item.location.lat, lng=item.location.lng;
-        //     console.log('New stop in route!')
-        //     waypts.push({
-        //         location:{lat,lng},
-        //         stopOver: true
-        //     })
-        //     setDestination({lat,lng})
-        // })
-        //
-        //waypts.pop();
+          waypts.pop();
         
-        // this is mock data:
+          locations.map((item, index)=>{
+              const lat = item.location.lat, lng=item.location.lng;
+              waypts.push({
+                  location:{lat,lng},
+                  stopOver: true
+              })
+          })
           
         setMap(map)
-        waypts.push({
-            location:{lat:32.151119, lng: 34.845105},
-            stopover: true,
-        })
-        waypts.push({
-            location:{lat:32.170437, lng:34.844282},
-            stopover: true,
-        })
-        setDestination({lat:32.083366,lng:34.800792})
-        
-  }, [navigator.geolocation,locations])
+        // waypts.push({
+        //     location:{lat:32.151119, lng: 34.845105},
+        //     stopover: true,
+        // })
+        // waypts.push({
+        //     location:{lat:32.170437, lng:34.844282},
+        //     stopover: true,
+        // })
+        // setDestination({lat:32.083366,lng:34.800792})
+          
+    }, [navigator.geolocation,locations])
 
     const onUnmount = useCallback(function callback(map) {
         setMap(null)
@@ -91,27 +82,33 @@ function MyMap({locations, isDisplayRoute}) {
     const handleActiveMarker = (marker) => {
         setActiveMarker(marker);
     };
-    
+  
     const directionsCallback = (googleResponse) => {
-        if (googleResponse) {
-          if(response) {
-            if (googleResponse.status === 'OK' && googleResponse.routes.overview_polyline !== response.routes.overview_polyline) {
-              setResponse(() => googleResponse)
-              setRoute(googleResponse.routes[0])
-            } else {
-              console.log('response: ', googleResponse)
-            }
+      if (googleResponse) {
+        if(response) {
+          if (googleResponse.status === 'OK' && googleResponse.routes.overview_polyline !== response.routes.overview_polyline) {
+            setResponse(() => googleResponse)
+            setRoute(googleResponse.routes[0])
           } else {
-            if (googleResponse.status === 'OK') {
-              setResponse(() => googleResponse)
-              setRoute(googleResponse.routes[0])
-            } else {
-              console.log('response: ', googleResponse)
-            }
+            console.log('response: ', googleResponse)
+          }
+        } else {
+          if (googleResponse.status === 'OK') {
+            setResponse(() => googleResponse)
+            setRoute(googleResponse.routes[0])
+          } else {
+            console.log('response: ', googleResponse)
           }
         }
       }
+    }
 
+    const pushWaypoint = (lat,lng) =>{
+      waypts.push({
+        location:{lat:lat, lng: lng},
+        stopover: true,
+      })
+    }
 
     return isLoaded ? (
         <GoogleMap
@@ -125,9 +122,9 @@ function MyMap({locations, isDisplayRoute}) {
         >
             
         { /* Child components, such as markers, info windows, etc. */ }
-        {/* This is called TOO MANY TIMES!!! */}
         {locations && isLoaded && locations.map((item, index)=>{
             const lat = item.location.lat , lng=item.location.lng;
+            (isDisplayRoute && pushWaypoint(lat, lng))
             return <>
             {item.location &&<>
                 <Marker key={index} position={{ lat,lng }} onClick={() => handleActiveMarker(index)} onCloseClick={() => handleActiveMarker(none)}>
