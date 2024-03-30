@@ -51,8 +51,6 @@ function MyMap({locations, isDisplayRoute}) {
           } else {
             console.error('Geolocation is not supported by this browser.');
           }
-
-          waypts.pop();
         
           locations.map((item, index)=>{
               const lat = item.location.lat, lng=item.location.lng;
