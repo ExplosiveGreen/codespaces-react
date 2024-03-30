@@ -140,7 +140,7 @@ export default function PersistentDrawerLeft({
           <Link style={{ display: "flex" }} to="/">
             <img
               style={{ aspectRatio: 2 / 1 }}
-              src="../../../logo.png"
+              src="https://drive.google.com/file/d/1zf17qRFEcgC8Y4RwtVd26GZCYSG8rdwV/view?usp=sharing"
               alt="giveHubLogo"
             />
           </Link>
