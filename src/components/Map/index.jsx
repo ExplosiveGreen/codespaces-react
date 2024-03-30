@@ -36,6 +36,8 @@ function MyMap({ locations, isDisplayRoute }) {
   const [activeMarker, setActiveMarker] = useState(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [destLat, setDestLat] = useState(0.0);
+  const [destLng, setDestLng] = useState(0.0);
   const [response, setResponse] = useState(null);
   let count = useRef(0);
   const [route, setRoute] = useState(null);
@@ -60,7 +62,7 @@ function MyMap({ locations, isDisplayRoute }) {
       } else {
         console.error("Geolocation is not supported by this browser.");
       }
-
+      setMap(map);
       locations.map((item, index) => {
         const lat = item.location.lat,
           lng = item.location.lng;
@@ -68,19 +70,11 @@ function MyMap({ locations, isDisplayRoute }) {
           location: { lat, lng },
           stopOver: true,
         });
-        // setDestination({ lat: lat, lng: lng });
+        setDestLat(lat);
+        setDestLng(lng);
+        setDestination(new google.maps.LatLng(destLat, destLng));
       });
-
-      setMap(map);
-      // waypts.push({
-      //     location:{lat:32.151119, lng: 34.845105},
-      //     stopover: true,
-      // })
-      // waypts.push({
-      //     location:{lat:32.170437, lng:34.844282},
-      //     stopover: true,
-      // })
-      setDestination({ lat: 32.083366, lng: 34.800792 });
+      destination != null? setDestination(new google.maps.LatLng(destLat, destLng)):setDestination({ lat: 32.083366, lng: 34.800792 })
     },
     [navigator.geolocation, locations]
   );
@@ -122,6 +116,7 @@ function MyMap({ locations, isDisplayRoute }) {
       location: { lat: lat, lng: lng },
       stopover: true,
     });
+    setDestination(new google.maps.LatLng(lat, lng))
   };
 
   return isLoaded ? (
@@ -140,7 +135,7 @@ function MyMap({ locations, isDisplayRoute }) {
         locations.map((item, index) => {
           const lat = item.location.lat,
             lng = item.location.lng;
-          isDisplayRoute && pushWaypoint(lat, lng);
+          isDisplayRoute && (pushWaypoint(lat, lng));
           return (
             <>
               {item.location && (
@@ -162,12 +157,11 @@ function MyMap({ locations, isDisplayRoute }) {
             </>
           );
         })}
-
       {isLoaded && isDisplayRoute && (
         <>
           <div>
             <>
-              {destination !== "" && origin !== "" && (
+              {destination !== null && origin !== null && (
                 <DirectionsService
                   options={{
                     origin: origin,
